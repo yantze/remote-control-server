@@ -4,6 +4,8 @@ html, body {
   padding: 0;
   overflow:hidden;
   -webkit-app-region: no-drag;
+
+  background-color: #F2F2F2;
 }
 
 #container {
@@ -21,7 +23,7 @@ html, body {
     flex: 1;
 }
 
-#control {
+/* #control {
     display: flex;
     height: 300px;
     outline: 1px solid red;
@@ -29,5 +31,22 @@ html, body {
 
 #control div {
     flex: 1;
+    outline: 1px solid blue;
+} */
+
+
+#keyboard {
+    display: flex;
+    height: 200px;
+    outline: 1px solid red;
+}
+
+#instant-keyboard {
+    height: 200px;
+    widht: 200px;
+    outline: 1px solid red;
+}
+
+#instant-keyboard input {
     outline: 1px solid blue;
 }

@@ -18,14 +18,14 @@ const pressedToState = {
 }
 
 module.exports = function (socket, robot) {
-  function moveMouse ({ x, y }) {
+  function moveMouse({ x, y }) {
     const { x: X, y: Y } = robot.getMousePos()
     robot.moveMouse(X + x, Y + y)
   }
 
-  function scrollMouse ({ x, y }) {
-    y = y > 0 ? 1 : -1
-    robot.scrollMouse(0, y)
+  function scrollMouse({ x, y }) {
+    // y = y > 0 ? 1 : -1
+    robot.scrollMouse(x, y)
   }
 
   socket.on(c.WS_MOUSE_MOVE, ({ x, y, scroll }) => {

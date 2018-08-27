@@ -6,20 +6,24 @@
   "scripts": {
     "start": "node ./bin/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:server": "browserify -t vueify -e res/client.js -o res/bundle.js"
+    "build:server": "browserify -t vueify -e res/client.js -o res/bundle.js",
+    "build:server-hot": "watchify -vd -p browserify-hmr -t vueify -e res/client.js -o res/bundle.js & node ./bin/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "browserify": "^16.2.2",
+    "browserify-hmr": "^0.3.6",
     "express": "^4.16.3",
+    "hammerjs": "^2.0.8",
     "node-sass": "^4.9.3",
     "pug": "^2.0.3",
     "robotjs": "^0.5.1",
     "seamless-immutable": "^7.1.3",
     "socketio": "^1.0.0",
     "vue": "^2.5.17",
-    "vueify": "^9.4.1"
+    "vueify": "^9.4.1",
+    "watchify": "^3.11.0"
   }
 }
