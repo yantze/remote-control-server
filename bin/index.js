@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict'
 const http = require('../server/app.js')
 const os = require('os')

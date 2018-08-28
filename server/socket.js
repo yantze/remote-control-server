@@ -9,7 +9,16 @@ const KEY_MAPPING = Immutable({
   37: 'left',
   38: 'up',
   39: 'right',
-  40: 'down'
+  40: 'down',
+  32: 'space',
+  101: 'audio_mute',
+  102: 'audio_vol_down',
+  103: 'audio_vol_up',
+  104: 'audio_play',
+  105: 'audio_stop',
+  106: 'audio_pause',
+  107: 'audio_prev',
+  108: 'audio_next'
 })
 
 const pressedToState = {

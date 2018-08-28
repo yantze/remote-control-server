@@ -18,7 +18,7 @@ html, body {
     flex-direction: column;
 }
 
-#touch-area {
+#trackpad {
     display: flex;
     flex: 1;
 }
@@ -49,4 +49,18 @@ html, body {
 
 #instant-keyboard input {
     outline: 1px solid blue;
+}
+
+#input-type {
+    position: absolute;
+    bottom: 93px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+button.btn {
+    padding: 5px;
+    outline: 1px solid gray;
 }
