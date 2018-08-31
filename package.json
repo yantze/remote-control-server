@@ -1,5 +1,5 @@
 {
-  "name": "robot",
+  "name": "remote-control-server",
   "version": "1.0.0",
   "description": "",
   "main": "./bin/inherit.js",
