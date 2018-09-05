@@ -11,14 +11,16 @@ const KEY_MAPPING = Immutable({
   39: 'right',
   40: 'down',
   32: 'space',
+
   101: 'audio_mute',
   102: 'audio_vol_down',
   103: 'audio_vol_up',
-  104: 'audio_play',
+  // 104: 'audio_play', // 官方文档的内容失效
   105: 'audio_stop',
-  106: 'audio_pause',
-  107: 'audio_prev',
-  108: 'audio_next'
+  // 106: 'audio_play_or_stop', // 不存在需要自己判断
+  107: 'audio_pause',
+  108: 'audio_prev',
+  109: 'audio_next'
 })
 
 const pressedToState = {
@@ -26,10 +28,12 @@ const pressedToState = {
   false: 'up'
 }
 
+let flag = true
+
 module.exports = function (socket, robot) {
   function moveMouse({ x, y }) {
-    const { x: X, y: Y } = robot.getMousePos()
-    robot.moveMouse(X + x, Y + y)
+    const pos = robot.getMousePos()
+    robot.moveMouse(pos.x + x, pos.y + y)
   }
 
   function scrollMouse({ x, y }) {
@@ -66,6 +70,7 @@ module.exports = function (socket, robot) {
     if (string) {
       robot.typeString(string)
     } else if (specialKey) {
+      // console.log('specialKey:', specialKey)
       robot.keyTap(specialKey)
     } else {
       // Hack for android where key code is always 229. We use the backspace

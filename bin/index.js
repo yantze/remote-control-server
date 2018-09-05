@@ -2,7 +2,7 @@
 const http = require('../server/app.js')
 const os = require('os')
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3399
 const ifaces = os.networkInterfaces()
 http.listen(port, function () {
   Object.keys(ifaces).forEach(ifname =>

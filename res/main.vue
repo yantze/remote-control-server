@@ -1,26 +1,62 @@
 <template>
     <div id="container">
-        <div v-show="inputType=='trackPad'" ref="trackPad" id="trackpad" @touchmove.prevent="touchMove">{{msg}}</div>
-        <div v-show="inputType=='keyboardSimple'" id="keyboard-simple">
-          <button class="btn" @click="clickUp">上</button>
-          <button class="btn" @click="clickDown">下</button>
-          <button class="btn" @click="clickLeft">左</button>
-          <button class="btn" @click="clickRight">右</button>
-          <button class="btn" @click="clickVolUp">音量+</button>
-          <button class="btn" @click="clickVolDown">音量-</button>
-          <button class="btn" @click="clickVolMute">静音</button>
-          <button class="btn" @click="clickAudioPlay">播放</button>
-          <button class="btn" @click="clickAudioPause">暂停</button>
-          <button class="btn" @click="clickAudioNext">向前</button>
-          <button class="btn" @click="clickAudioPrev">向后</button>
-          <button class="btn" @click="clickSpace">Space</button>
+        <div v-show="options.selectedInputType=='trackPad'" ref="trackPad" id="trackpad" @touchmove.prevent="touchMove"></div>
+        <div v-show="options.selectedInputType=='keyboardSimple'" id="keyboard-simple" @touchmove.prevent="empty">
+          <div id="direction-control">
+            <div class="direction-row">
+              <button class="pure-button" @click="clickUp">
+                <img src="res/images/direction.svg" alt="Up"/>
+              </button>
+            </div>
+            <div class="direction-row">
+              <button class="pure-button" @click="clickLeft">
+                <img class="rotate270" src="res/images/direction.svg" alt="Left"/>
+              </button>
+              <button class="pure-button" @click="clickDown">
+                <img class="rotate180" src="res/images/direction.svg" alt="Down"/>
+              </button>
+              <button class="pure-button" @click="clickRight">
+                <img class="rotate90" src="res/images/direction.svg" alt="Right"/>
+              </button>
+            </div>
+          </div>
+
+          <div id="function-control">
+            <div class="row">
+              <button class="pure-button" @click="clickVolMute">静音</button>
+              <button class="pure-button" @click="clickVolDown">音量-</button>
+              <button class="pure-button" @click="clickVolUp">音量+</button>
+            </div>
+
+            <div class="row">
+              <button class="pure-button" @click="clickAudioPrev">向后</button>
+              <button class="pure-button" @click="clickAudioPlay">播放</button>
+              <button class="pure-button" @click="clickAudioNext">向前</button>
+            </div>
+
+            <div class="row">
+              <button class="pure-button" @click="clickSpace">Space</button>
+              <button class="pure-button" @click="clickEsc">Esc</button>
+            </div>
+
+            <div class="row">
+              <button class="pure-button" @click="clickTab">Tab</button>
+              <button class="pure-button" @click="clickEnter">Enter</button>
+            </div>
+          </div>
+
+          <!-- <div id="log">{{log}}</div> -->
         </div>
-        <div v-if="inputType=='keyboardOriginal'" id="keyboard-original">
+        <div v-if="options.selectedInputType=='keyboardOriginal'" id="keyboard-original">
             <input type="password" value=" " style="ime-mode: disabled"/>
         </div>
-        <div id="input-type">
-          <button class="btn" @click="selectInputType('trackPad')">trackpad</button>
-          <button class="btn" @click="selectInputType('keyboardSimple')">keyboard-simple</button>
+        <div id="input-type" @touchmove.prevent="empty">
+          <button class="pure-button" @click="selectInputType('trackPad')">
+              <img class="" src="res/images/trackpad.svg" alt="switch to trackpad"/>
+          </button>
+          <button class="pure-button keyboard-control" @click="selectInputType('keyboardSimple')">
+              <img class="" src="res/images/control.svg" alt="switch to control"/>
+          </button>
         </div>
         <!-- <div id="keyboard">
             <div id="keyboard-type">
@@ -40,9 +76,11 @@
 const Hammer = require("hammerjs/hammer.js");
 
 const socket = io(location.origin);
-// setInterval(() => {
-//   socket.emit("WS_MOUSE_MOVE", { x: 50, y: 0, scroll: true });
-// }, 2000);
+const mousePos = {
+  clientX: 0,
+  clientY: 0,
+  timestamp: Date.now()
+};
 
 module.exports = {
   //   el: "#container",
@@ -50,10 +88,14 @@ module.exports = {
     return {
       input: "# hello",
       msg: "bbb",
-      lastTouch: null,
       lastPosition: [],
-      inputType: "keyboardSimple"
+      options: {
+        selectedInputType: "keyboardSimple"
+      }
     };
+  },
+  created() {
+    this.initOptions();
   },
   mounted() {
     if (this.$refs.trackPad) {
@@ -66,17 +108,23 @@ module.exports = {
       //   console.log("event:", event);
       if (event.touches.length === 1) {
         const touch = event.touches[0];
-        if (!this.lastTouch) {
-          this.lastTouch = touch;
+        const now = Date.now();
+        const duration = mousePos.timestamp - now;
+
+        mousePos.timestamp = now;
+        mousePos.clientX = touch.clientX;
+        mousePos.clientY = touch.clientY;
+
+        if (duration > 100) {
           return;
         }
 
-        let distanceX = touch.clientX - this.lastTouch.clientX;
-        let distanceY = touch.clientY - this.lastTouch.clientY;
-        socket.emit("WS_MOUSE_MOVE", { x: distanceX, y: distanceY });
-        // this.msg = 'good:' + distanceX
-
-        this.lastTouch = touch;
+        let distanceX = touch.clientX - mousePos.clientX;
+        let distanceY = touch.clientY - mousePos.clientY;
+        socket.emit("WS_MOUSE_MOVE", {
+          x: distanceX * 1.5,
+          y: distanceY * 1.5
+        });
       }
     },
     keyboardInput(event) {
@@ -150,7 +198,9 @@ module.exports = {
       });
     },
     selectInputType(type) {
-      this.inputType = type;
+      this.setOptions({
+        selectedInputType: type
+      });
     },
     clickUp() {
       socket.emit("WS_KEY_PRESS", { code: 38 });
@@ -167,6 +217,15 @@ module.exports = {
     clickSpace() {
       socket.emit("WS_KEY_PRESS", { code: 32 });
     },
+    clickEsc() {
+      socket.emit("WS_KEY_PRESS", { code: 27 });
+    },
+    clickTab() {
+      socket.emit("WS_KEY_PRESS", { code: 9 });
+    },
+    clickEnter() {
+      socket.emit("WS_KEY_PRESS", { code: 13 });
+    },
     clickVolMute() {
       socket.emit("WS_KEY_PRESS", { code: 101 });
     },
@@ -177,16 +236,16 @@ module.exports = {
       socket.emit("WS_KEY_PRESS", { code: 103 });
     },
     clickAudioPrev() {
-      socket.emit("WS_KEY_PRESS", { code: 107 });
-    },
-    clickAudioNext() {
       socket.emit("WS_KEY_PRESS", { code: 108 });
-    },
-    clickAudioPause() {
-      socket.emit("WS_KEY_PRESS", { code: 106 });
     },
     clickAudioPlay() {
       socket.emit("WS_KEY_PRESS", { code: 104 });
+    },
+    clickAudioNext() {
+      socket.emit("WS_KEY_PRESS", { code: 109 });
+    },
+    clickAudioPlayOrPause() {
+      socket.emit("WS_KEY_PRESS", { code: 106 });
     },
 
     leftClick(event) {
@@ -207,7 +266,139 @@ module.exports = {
     },
     rightDoubleClick(event) {
       socket.emit("WS_MOUSE_CLICK", { button: "right", double: true });
+    },
+    initOptions() {
+      const options = this.getOptions();
+      if (options) {
+        this.options = options;
+      }
+    },
+    getOptions() {
+      const optionsStringify = localStorage.getItem("options");
+      let options = null;
+      try {
+        options = JSON.parse(optionsStringify);
+      } catch (err) {
+        throw err;
+      }
+      return options;
+    },
+    setOptions(options) {
+      Object.assign(this.options, options);
+      return localStorage.setItem("options", JSON.stringify(this.options));
     }
   }
 };
 </script>
+
+<style scoped>
+#trackpad {
+  display: flex;
+  flex: 1;
+}
+
+#keyboard {
+  display: flex;
+  height: 200px;
+  outline: 1px solid red;
+}
+
+@media screen and (min-width: 425px) {
+  #keyboard-simple {
+    display: flex;
+  }
+
+  #direction-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .direction-row button.pure-button {
+    padding: 2px 4px;
+  }
+}
+
+#instant-keyboard {
+  height: 200px;
+  width: 200px;
+  outline: 1px solid red;
+}
+
+#instant-keyboard input {
+  outline: 1px solid blue;
+}
+
+#input-type {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#input-type button {
+  width: 122px;
+  height: 68px;
+  padding-top: 13px;
+}
+
+#input-type .keyboard-control img {
+  /* padding: 5px; */
+  vertical-align: super;
+}
+
+.direction-row {
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px;
+}
+
+.row button {
+  width: 122px;
+  height: 51px;
+}
+
+.rotate90 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.rotate180 {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.rotate270 {
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+
+.direction-row button {
+  background: transparent;
+}
+
+.direction-row button:active {
+  /* background: black; */
+  background: linear-gradient(
+    transparent,
+    rgba(0, 0, 0, 0.05) 40%,
+    rgba(0, 0, 0, 0.1)
+  );
+}
+</style>

@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
-<!--
+  <!--
 Created using JS Bin
 http://jsbin.com
 
@@ -11,127 +11,130 @@ Copyright (c) 2018 by anonymous (http://jsbin.com/busifodeka/11/edit)
 
 Released under the MIT license: http://jsbin.mit-license.org
 -->
-<meta name="robots" content="noindex">
+  <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width">
   <title>JS Bin</title>
 
-<style id="jsbin-css">
-* {
-  box-sizing: border-box;
-}
+  <style id="jsbin-css">
+    * {
+      box-sizing: border-box;
+    }
 
-html, body {
-  height: 100%;
-}
+    html,
+    body {
+      height: 100%;
+    }
 
-body {
-  background-color: #000;
-  margin: 0;
-}
+    body {
+      background-color: #000;
+      margin: 0;
+    }
 
-.center-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    .center-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-.square {
-  width: 290px;
-  height: 290px;
-  background-color: #689F38;
-  transition: transform 300ms ease-out;
-}
+    .square {
+      width: 290px;
+      height: 290px;
+      background-color: #689F38;
+      transition: transform 300ms ease-out;
+    }
 
-.expand {
-  transform: scale(2.5);
-}
-</style>
+    .expand {
+      transform: scale(2.5);
+    }
+  </style>
 </head>
+
 <body>
-<!-- Scripts -->
-<script src="/hammer.min.js"></script>
+  <!-- Scripts -->
+  <script src="/hammer.min.js"></script>
 
-   
-<body class="center-center">  
+
+  <body class="center-center">
     <div class="square"></div>
-</body>  
-<script>
-// Get a reference to an element
-var square = document.querySelector('.square');
+  </body>
+  <script>
+    // Get a reference to an element
+    var square = document.querySelector('.square');
 
-// Create a manager to manager the element
-var manager = new Hammer.Manager(square);
+    // Create a manager to manager the element
+    var manager = new Hammer.Manager(square);
 
-// Create a recognizer
-var DoubleTap = new Hammer.Tap({
-  event: 'doubletap',
-  taps: 2
-});
+    // Create a recognizer
+    var DoubleTap = new Hammer.Tap({
+      event: 'doubletap',
+      taps: 2
+    });
 
-// Add the recognizer to the manager
-manager.add(DoubleTap);
+    // Add the recognizer to the manager
+    manager.add(DoubleTap);
 
-// Subscribe to desired event
-manager.on('doubletap', function(e) {
-//  e.target.classList.toggle('expand');
-  console.log('two tap')
-});
+    // Subscribe to desired event
+    manager.on('doubletap', function (e) {
+      //  e.target.classList.toggle('expand');
+      console.log('two tap')
+    });
 
-// ===============
-var Tap = new Hammer.Tap({
-  taps: 1
-});
+    // ===============
+    var Tap = new Hammer.Tap({
+      taps: 1
+    });
 
-// Add the recognizer to the manager
-manager.add(Tap);
+    // Add the recognizer to the manager
+    manager.add(Tap);
 
-// Subscribe to the desired event
-manager.on('tap', function(e) {
-//  e.target.classList.toggle('expand');
-  console.log('one tap')
-});
+    // Subscribe to the desired event
+    manager.on('tap', function (e) {
+      //  e.target.classList.toggle('expand');
+      console.log('one tap')
+    });
 
-// ===============
-var Press = new Hammer.Press({
-  time: 500
-});
+    // ===============
+    var Press = new Hammer.Press({
+      time: 500
+    });
 
-// Add the recognizer to the manager
-manager.add(Press);
+    // Add the recognizer to the manager
+    manager.add(Press);
 
-// Subscribe to desired event
-manager.on('press', function(e) {
-  e.target.classList.toggle('expand');
-});
+    // Subscribe to desired event
+    manager.on('press', function (e) {
+      e.target.classList.toggle('expand');
+    });
 
-// ==============
+    // ==============
 
-// var Pan = new Hammer.Pan({})
-// manager.add(Pan);
-// manager.on('pan', function(ev) {
-// // 	console.log(ev);
-// });
+    // var Pan = new Hammer.Pan({})
+    // manager.add(Pan);
+    // manager.on('pan', function(ev) {
+    // // 	console.log(ev);
+    // });
 
-// ==============
-var Swipe = new Hammer.Swipe({})
-manager.add(Swipe)
-manager.on('swipe', function(ev) {
-  console.log('swipe')
-})
+    // ==============
+    var Swipe = new Hammer.Swipe({})
+    manager.add(Swipe)
+    manager.on('swipe', function (ev) {
+      console.log('swipe')
+    })
 
-// ==============
-var TwoPan = new Hammer.Pan({ pointers: 2, threshold:2, event: 'twopan' })
-manager.add(TwoPan);
-manager.on('twopan', function(ev) {
-	console.log('two pan move');
-});
+    // ==============
+    var TwoPan = new Hammer.Pan({ pointers: 2, threshold: 2, event: 'twopan' })
+    manager.add(TwoPan);
+    manager.on('twopan', function (ev) {
+      console.log('two pan move');
+    });
 
-var OnePan = new Hammer.Pan({ pointers: 1, threshold:2, event: 'onepan' })
-manager.add(OnePan);
-manager.on('onepan', function(ev) {
-	console.log('one pan move');
-});
-</script>
+    var OnePan = new Hammer.Pan({ pointers: 1, threshold: 2, event: 'onepan' })
+    manager.add(OnePan);
+    manager.on('onepan', function (ev) {
+      console.log('one pan move');
+    });
+  </script>
 
 </body>
+
 </html>

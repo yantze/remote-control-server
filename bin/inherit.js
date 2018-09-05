@@ -3,7 +3,7 @@ const http = require('../server/app.js')
 const os = require('os')
 
 module.exports = function ({ port }) {
-    const port = port || 3000
+    port = port || 3399
     const ifaces = os.networkInterfaces()
     http.listen(port, function () {
         Object.keys(ifaces).forEach(ifname =>
