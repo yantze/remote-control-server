@@ -2,7 +2,7 @@
   "name": "remote-control-server",
   "version": "1.0.0",
   "description": "Remote control your computer keyboard and trackpad.",
-  "main": "./bin/inherit.js",
+  "main": "./res/bundle.js",
   "scripts": {
     "start": "node ./bin/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
