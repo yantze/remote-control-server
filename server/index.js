@@ -30,5 +30,5 @@ function startServer({ port } = {}) {
   })
 }
 
-// module.exports = startServer
-startServer()
+module.exports = startServer
+// startServer()
