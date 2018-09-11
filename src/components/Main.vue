@@ -5,18 +5,18 @@
           <div id="direction-control">
             <div class="direction-row">
               <button class="pure-button" @click="clickUp">
-                <img src="res/images/direction.svg" alt="Up"/>
+                <img src="/img/direction.svg" alt="Up"/>
               </button>
             </div>
             <div class="direction-row">
               <button class="pure-button" @click="clickLeft">
-                <img class="rotate270" src="res/images/direction.svg" alt="Left"/>
+                <img class="rotate270" src="/img/direction.svg" alt="Left"/>
               </button>
               <button class="pure-button" @click="clickDown">
-                <img class="rotate180" src="res/images/direction.svg" alt="Down"/>
+                <img class="rotate180" src="/img/direction.svg" alt="Down"/>
               </button>
               <button class="pure-button" @click="clickRight">
-                <img class="rotate90" src="res/images/direction.svg" alt="Right"/>
+                <img class="rotate90" src="/img/direction.svg" alt="Right"/>
               </button>
             </div>
           </div>
@@ -52,10 +52,10 @@
         </div>
         <div id="input-type" @touchmove.prevent="empty">
           <button class="pure-button" @click="selectInputType('trackPad')">
-              <img class="" src="res/images/trackpad.svg" alt="switch to trackpad"/>
+              <img class="" src="/img/trackpad.svg" alt="switch to trackpad"/>
           </button>
           <button class="pure-button keyboard-control" @click="selectInputType('keyboardSimple')">
-              <img class="" src="res/images/control.svg" alt="switch to control"/>
+              <img class="" src="/img/control.svg" alt="switch to control"/>
           </button>
         </div>
         <!-- <div id="keyboard">
@@ -72,34 +72,36 @@
     </div>
 </template>
 
-<script>
-const Hammer = require("hammerjs/hammer.js");
+<script lang="ts">
+import Hammer from 'hammerjs'
+import io from 'socket.io-client'
+import Vue from 'vue'
 
-const socket = io(location.origin);
+const socket = io(location.origin)
 const mousePos = {
   clientX: 0,
   clientY: 0,
-  timestamp: Date.now()
-};
+  timestamp: Date.now(),
+}
 
-module.exports = {
+export default Vue.extend({
   //   el: "#container",
-  data: function() {
+  data() {
     return {
-      input: "# hello",
-      msg: "bbb",
+      input: '# hello',
+      msg: 'bbb',
       lastPosition: [],
       options: {
-        selectedInputType: "keyboardSimple"
-      }
-    };
+        selectedInputType: 'keyboardSimple',
+      },
+    }
   },
   created() {
-    this.initOptions();
+    this.initOptions()
   },
   mounted() {
     if (this.$refs.trackPad) {
-      this.handleTrackPad(this.$refs.trackPad);
+      this.handleTrackPad(this.$refs.trackPad)
     }
   },
   methods: {
@@ -107,188 +109,188 @@ module.exports = {
     touchMove(event) {
       //   console.log("event:", event);
       if (event.touches.length === 1) {
-        const touch = event.touches[0];
-        const now = Date.now();
-        const duration = mousePos.timestamp - now;
+        const touch = event.touches[0]
+        const now = Date.now()
+        const duration = mousePos.timestamp - now
 
-        mousePos.timestamp = now;
-        mousePos.clientX = touch.clientX;
-        mousePos.clientY = touch.clientY;
+        mousePos.timestamp = now
+        mousePos.clientX = touch.clientX
+        mousePos.clientY = touch.clientY
 
         if (duration > 100) {
-          return;
+          return
         }
 
-        let distanceX = touch.clientX - mousePos.clientX;
-        let distanceY = touch.clientY - mousePos.clientY;
-        socket.emit("WS_MOUSE_MOVE", {
+        const distanceX = touch.clientX - mousePos.clientX
+        const distanceY = touch.clientY - mousePos.clientY
+        socket.emit('WS_MOUSE_MOVE', {
           x: distanceX * 1.5,
-          y: distanceY * 1.5
-        });
+          y: distanceY * 1.5,
+        })
       }
     },
     keyboardInput(event) {
-      const alt = event.altKey || false;
-      const ctrl = event.ctrlKey || false;
-      const shift = event.shiftKey || false;
-      const meta = event.metaKey || false;
-      const code = event.which || event.keyCode;
-      const string = event.target.value;
-      event.target.value = "";
+      const alt = event.altKey || false
+      const ctrl = event.ctrlKey || false
+      const shift = event.shiftKey || false
+      const meta = event.metaKey || false
+      const code = event.which || event.keyCode
+      const keyValue = event.target.value
+      event.target.value = ''
     },
     handleTrackPad(ref) {
-      const manager = new Hammer.Manager(ref);
+      const manager = new Hammer.Manager(ref)
 
       const OneTap = new Hammer.Tap({
-        event: "onetap",
-        taps: 1
-      });
+        event: 'onetap',
+        taps: 1,
+      })
 
       // Add the recognizer to the manager
-      manager.add(OneTap);
+      manager.add(OneTap)
 
       // Subscribe to the desired event
-      manager.on("onetap", function(e) {
+      manager.on('onetap', e => {
         //  e.target.classList.toggle('expand');
-        console.log("one tap");
-        socket.emit("WS_MOUSE_CLICK", { button: "left", double: false });
-      });
+        console.log('one tap')
+        socket.emit('WS_MOUSE_CLICK', { button: 'left', double: false })
+      })
 
       const TwoTap = new Hammer.Tap({
-        event: "twotap",
-        pointers: 2
-      });
+        event: 'twotap',
+        pointers: 2,
+      })
 
       // Add the recognizer to the manager
-      manager.add(TwoTap);
+      manager.add(TwoTap)
 
       // Subscribe to the desired event
-      manager.on("twotap", function(e) {
+      manager.on('twotap', e => {
         //  e.target.classList.toggle('expand');
-        console.log("two tap");
-        socket.emit("WS_MOUSE_CLICK", { button: "right", double: false });
-      });
+        console.log('two tap')
+        socket.emit('WS_MOUSE_CLICK', { button: 'right', double: false })
+      })
 
       const TwoPan = new Hammer.Pan({
         pointers: 2,
         threshold: 5,
-        event: "twopan",
-        direction: Hammer.DIRECTION_ALL
-      });
-      manager.add(TwoPan);
-      manager.on("twopan", ev => {
-        console.log("two pan move");
+        event: 'twopan',
+        direction: Hammer.DIRECTION_ALL,
+      })
+      manager.add(TwoPan)
+      manager.on('twopan', ev => {
+        console.log('two pan move')
         if (this.lastPosition.length !== 2) {
           // console.log("first");
-          this.lastPosition = [ev.deltaX, ev.deltaY];
+          this.lastPosition = [ev.deltaX, ev.deltaY]
           // console.log("last:", lastPosition);
-          return;
+          return
         }
         if (ev.isFinal) {
-          this.lastPosition = [];
+          this.lastPosition = []
           // console.log("final");
         }
-        const distanceX = ev.deltaX - this.lastPosition[0];
-        const distanceY = ev.deltaY - this.lastPosition[1];
-        socket.emit("WS_MOUSE_MOVE", {
+        const distanceX = ev.deltaX - this.lastPosition[0]
+        const distanceY = ev.deltaY - this.lastPosition[1]
+        socket.emit('WS_MOUSE_MOVE', {
           x: distanceX * 0.5,
           y: distanceY * 0.5,
-          scroll: true
-        });
-      });
+          scroll: true,
+        })
+      })
     },
     selectInputType(type) {
       this.setOptions({
-        selectedInputType: type
-      });
+        selectedInputType: type,
+      })
     },
     clickUp() {
-      socket.emit("WS_KEY_PRESS", { code: 38 });
+      socket.emit('WS_KEY_PRESS', { code: 38 })
     },
     clickDown() {
-      socket.emit("WS_KEY_PRESS", { code: 40 });
+      socket.emit('WS_KEY_PRESS', { code: 40 })
     },
     clickLeft() {
-      socket.emit("WS_KEY_PRESS", { code: 37 });
+      socket.emit('WS_KEY_PRESS', { code: 37 })
     },
     clickRight() {
-      socket.emit("WS_KEY_PRESS", { code: 39 });
+      socket.emit('WS_KEY_PRESS', { code: 39 })
     },
     clickSpace() {
-      socket.emit("WS_KEY_PRESS", { code: 32 });
+      socket.emit('WS_KEY_PRESS', { code: 32 })
     },
     clickEsc() {
-      socket.emit("WS_KEY_PRESS", { code: 27 });
+      socket.emit('WS_KEY_PRESS', { code: 27 })
     },
     clickTab() {
-      socket.emit("WS_KEY_PRESS", { code: 9 });
+      socket.emit('WS_KEY_PRESS', { code: 9 })
     },
     clickEnter() {
-      socket.emit("WS_KEY_PRESS", { code: 13 });
+      socket.emit('WS_KEY_PRESS', { code: 13 })
     },
     clickVolMute() {
-      socket.emit("WS_KEY_PRESS", { code: 101 });
+      socket.emit('WS_KEY_PRESS', { code: 101 })
     },
     clickVolDown() {
-      socket.emit("WS_KEY_PRESS", { code: 102 });
+      socket.emit('WS_KEY_PRESS', { code: 102 })
     },
     clickVolUp() {
-      socket.emit("WS_KEY_PRESS", { code: 103 });
+      socket.emit('WS_KEY_PRESS', { code: 103 })
     },
     clickAudioPrev() {
-      socket.emit("WS_KEY_PRESS", { code: 108 });
+      socket.emit('WS_KEY_PRESS', { code: 108 })
     },
     clickAudioPlay() {
-      socket.emit("WS_KEY_PRESS", { code: 104 });
+      socket.emit('WS_KEY_PRESS', { code: 104 })
     },
     clickAudioNext() {
-      socket.emit("WS_KEY_PRESS", { code: 109 });
+      socket.emit('WS_KEY_PRESS', { code: 109 })
     },
     clickAudioPlayOrPause() {
-      socket.emit("WS_KEY_PRESS", { code: 106 });
+      socket.emit('WS_KEY_PRESS', { code: 106 })
     },
 
     leftClick(event) {
-      socket.emit("WS_MOUSE_CLICK", { button: "left", double: false });
+      socket.emit('WS_MOUSE_CLICK', { button: 'left', double: false })
     },
     middleClick(event) {
-      socket.emit("WS_MOUSE_CLICK", { button: "middle", double: false });
+      socket.emit('WS_MOUSE_CLICK', { button: 'middle', double: false })
     },
     rightClick(event) {
-      socket.emit("WS_MOUSE_CLICK", { button: "right", double: false });
+      socket.emit('WS_MOUSE_CLICK', { button: 'right', double: false })
     },
     leftDoubleClick(event) {
-      this.msg = "double click";
-      socket.emit("WS_MOUSE_CLICK", { button: "left", double: true });
+      this.msg = 'double click'
+      socket.emit('WS_MOUSE_CLICK', { button: 'left', double: true })
     },
     middleDoubleClick(event) {
-      socket.emit("WS_MOUSE_CLICK", { button: "middle", double: true });
+      socket.emit('WS_MOUSE_CLICK', { button: 'middle', double: true })
     },
     rightDoubleClick(event) {
-      socket.emit("WS_MOUSE_CLICK", { button: "right", double: true });
+      socket.emit('WS_MOUSE_CLICK', { button: 'right', double: true })
     },
     initOptions() {
-      const options = this.getOptions();
+      const options = this.getOptions()
       if (options) {
-        this.options = options;
+        this.options = options
       }
     },
     getOptions() {
-      const optionsStringify = localStorage.getItem("options");
-      let options = null;
+      const optionsStringify = localStorage.getItem('options')
+      let options = null
       try {
-        options = JSON.parse(optionsStringify);
+        options = JSON.parse(optionsStringify)
       } catch (err) {
-        throw err;
+        throw err
       }
-      return options;
+      return options
     },
     setOptions(options) {
-      Object.assign(this.options, options);
-      return localStorage.setItem("options", JSON.stringify(this.options));
-    }
-  }
-};
+      Object.assign(this.options, options)
+      return localStorage.setItem('options', JSON.stringify(this.options))
+    },
+  },
+})
 </script>
 
 <style scoped>
