@@ -1,5 +1,13 @@
 <template>
     <div id="container">
+        <div id="input-type" @touchmove.prevent="empty">
+          <button class="pure-button" @click="selectInputType('trackPad')">
+              <img class="" src="/img/trackpad.svg" alt="switch to trackpad"/>
+          </button>
+          <button class="pure-button keyboard-control" @click="selectInputType('keyboardSimple')">
+              <img class="" src="/img/control.svg" alt="switch to control"/>
+          </button>
+        </div>
         <div v-show="options.selectedInputType=='trackPad'" ref="trackPad" id="trackpad" @touchmove.prevent="touchMove"></div>
         <div v-show="options.selectedInputType=='keyboardSimple'" id="keyboard-simple" @touchmove.prevent="empty">
           <div id="direction-control">
@@ -49,14 +57,6 @@
         </div>
         <div v-if="options.selectedInputType=='keyboardOriginal'" id="keyboard-original">
             <input type="password" value=" " style="ime-mode: disabled"/>
-        </div>
-        <div id="input-type" @touchmove.prevent="empty">
-          <button class="pure-button" @click="selectInputType('trackPad')">
-              <img class="" src="/img/trackpad.svg" alt="switch to trackpad"/>
-          </button>
-          <button class="pure-button keyboard-control" @click="selectInputType('keyboardSimple')">
-              <img class="" src="/img/control.svg" alt="switch to control"/>
-          </button>
         </div>
         <!-- <div id="keyboard">
             <div id="keyboard-type">
@@ -333,7 +333,7 @@ export default Vue.extend({
 
 #input-type {
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
