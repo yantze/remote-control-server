@@ -38,7 +38,7 @@ function stopServer() {
 }
 
 module.exports = {
-  startServer,
-  stopSeerver
+  start,
+  stop
 }
 // startServer()
