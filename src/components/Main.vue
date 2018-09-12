@@ -13,18 +13,18 @@
           <div id="direction-control">
             <div class="direction-row">
               <button class="pure-button" @click="clickUp">
-                <img src="/img/direction.svg" alt="Up"/>
+                <img class="direction-img" src="/img/direction.svg" alt="Up"/>
               </button>
             </div>
             <div class="direction-row">
               <button class="pure-button" @click="clickLeft">
-                <img class="rotate270" src="/img/direction.svg" alt="Left"/>
+                <img class="direction-img rotate270" src="/img/direction.svg" alt="Left"/>
               </button>
               <button class="pure-button" @click="clickDown">
-                <img class="rotate180" src="/img/direction.svg" alt="Down"/>
+                <img class="direction-img rotate180" src="/img/direction.svg" alt="Down"/>
               </button>
               <button class="pure-button" @click="clickRight">
-                <img class="rotate90" src="/img/direction.svg" alt="Right"/>
+                <img class="direction-img rotate90" src="/img/direction.svg" alt="Right"/>
               </button>
             </div>
           </div>
@@ -36,11 +36,11 @@
               <button class="pure-button" @click="clickVolUp">音量+</button>
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
               <button class="pure-button" @click="clickAudioPrev">向后</button>
               <button class="pure-button" @click="clickAudioPlay">播放</button>
               <button class="pure-button" @click="clickAudioNext">向前</button>
-            </div>
+            </div> -->
 
             <div class="row">
               <button class="pure-button" @click="clickSpace">Space</button>
@@ -77,7 +77,8 @@ import Hammer from 'hammerjs'
 import io from 'socket.io-client'
 import Vue from 'vue'
 
-const socket = io(location.origin)
+// const socket = io(location.origin)
+const socket = io(location.hostname + ':3399')
 const mousePos = {
   clientX: 0,
   clientY: 0,
@@ -393,6 +394,13 @@ export default Vue.extend({
 
 .direction-row button {
   background: transparent;
+  padding: 0;
+  margin: 0;
+  height: 76px;
+}
+
+.direction-row .direction-img {
+  padding: 30px;
 }
 
 .direction-row button:active {
