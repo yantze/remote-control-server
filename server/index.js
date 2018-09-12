@@ -13,8 +13,6 @@ app.use(express.static(path.resolve(__dirname, "../dist")))
 
 io.on("connection", socket => handleSocket(socket, robot))
 
-const instanceServer = null
-
 /**
  *
  * @param {} param0
@@ -23,22 +21,15 @@ const instanceServer = null
 function startServer({ port } = {}) {
   port = port || 3399
   const ifaces = os.networkInterfaces()
-  instanceServer = http.listen(port, function() {
+  return http.listen(port, function() {
     Object.keys(ifaces).forEach(ifname =>
       ifaces[ifname].forEach(iface =>
         console.log("listening on", iface.address, "and port", port),
       ),
     )
   })
-  return instanceServer
-}
-
-function stopServer() {
-  instanceServer && instanceServer.close()
 }
 
 module.exports = {
-  start,
-  stop
+  start: startServer,
 }
-// startServer()

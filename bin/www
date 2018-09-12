@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
-const startServer = require('../server')
+const instanceServer = require('../server')
 
-const server = startServer()
+const server = instanceServer.start()
 
-// server.close()
+// setTimeout(() => {
+//     server.close(() => {
+//         console.log('server close return')
+//     })
+// }, 5000)
