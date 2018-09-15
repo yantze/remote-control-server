@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="flex flex-column">
     <Main/>
   </div>
 </template>
@@ -18,9 +18,8 @@ export default Vue.extend({
 
 <style>
 #app {
-  margin-top: 110px;
-  display: block;
-  width: 100vw;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
@@ -40,15 +39,23 @@ html, body {
   font-size: 16px;
 }
 
-#container {
-    /* outline: 1px solid red; */
-
-    display: flex;
-    flex-direction: column;
+html, body, #app {
+  height: 100%;
 }
 
+/* =========== Library: Layout ============= */
 
+.flex-expand {
+  flex: 1;
+}
 
+.flex-column {
+  flex-direction: column;
+}
+
+.flex {
+  display: flex;
+}
 
 
 /* =========== Library ============= */

@@ -1,6 +1,6 @@
 {
-  "name": "test-server",
-  "short_name": "test-server",
+  "name": "Remote Control",
+  "short_name": "remote-control",
   "icons": [
     {
       "src": "/img/icons/android-chrome-192x192.png",
