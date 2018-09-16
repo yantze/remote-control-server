@@ -63,8 +63,8 @@
           </div>
           <div v-show="options.selectedInputType=='help'" id="help">
             <ul>
-              <li>点击上面的触控板按钮显示空白界面，可以通过手指滑动来移动指针。</li>
-              <li>选择上方的控制按钮显示简单的遥控界面</li>
+              <li>触控板按钮:空白界面，通过手指滑动来移动指针, 支持手势。</li>
+              <li>遥控按钮:常用的按键。</li>
               <li>可以去 <a href="https://github.com/yantze/remote-control-server/issues">这里</a> 反馈</li>
               <li>或者给我发送邮件 <a href="mailto:yantze@126.com">yantze@126.com</a></li>
             </ul>
@@ -140,23 +140,21 @@ export default Vue.extend({
       if (event.touches.length === 1) {
         const touch = event.touches[0]
         const now = Date.now()
-        const duration = mousePos.timestamp - now
+        const duration =  now - mousePos.timestamp
+
+        console.log('duration:', duration)
+        if (duration < 100) {
+          const distanceX = touch.clientX - mousePos.clientX
+          const distanceY = touch.clientY - mousePos.clientY
+          socket.emit('WS_MOUSE_MOVE', {
+            x: distanceX * 1.5,
+            y: distanceY * 1.5,
+          })
+        }
 
         mousePos.timestamp = now
         mousePos.clientX = touch.clientX
         mousePos.clientY = touch.clientY
-
-        if (duration > 100) {
-          return
-        }
-
-        const distanceX = touch.clientX - mousePos.clientX
-        const distanceY = touch.clientY - mousePos.clientY
-        console.log('distance:', distanceX, distanceY)
-        socket.emit('WS_MOUSE_MOVE', {
-          x: distanceX * 1.5,
-          y: distanceY * 1.5,
-        })
       }
     },
     keyboardInput(event) {
