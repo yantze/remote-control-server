@@ -35,9 +35,9 @@
 
             <div id="function-control">
               <div class="row">
-                <button class="pure-button" @click="clickKey('volMute')">静音</button>
-                <button class="pure-button" @click="clickKey('volDown')">音量-</button>
-                <button class="pure-button" @click="clickKey('volUp')">音量+</button>
+                <button class="pure-button" @click="clickKey('volMute')">Mute</button>
+                <button class="pure-button" @click="clickKey('volDown')">Vol-</button>
+                <button class="pure-button" @click="clickKey('volUp')">Vol+</button>
               </div>
 
               <!-- <div class="row">
@@ -294,148 +294,148 @@ export default Vue.extend({
 
 <style scoped>
 #container {
-  height: 100vh;
+    height: 100vh;
 }
 
 #trackpad {
-  display: flex;
-  flex: 1;
+    display: flex;
+    flex: 1;
 }
 
 #keyboard {
-  display: flex;
-  height: 200px;
-  outline: 1px solid red;
+    display: flex;
+    height: 200px;
+    outline: 1px solid red;
 }
 
 #keyboard-simple {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (min-width: 425px) {
-  #keyboard-simple {
-    display: flex;
-  }
+    #keyboard-simple {
+        display: flex;
+    }
 
-  #direction-control {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+    #direction-control {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 
-  .direction-row button.pure-button {
-    padding: 2px 4px;
-  }
+    .direction-row button.pure-button {
+        padding: 2px 4px;
+    }
 }
 
 #instant-keyboard {
-  height: 200px;
-  width: 200px;
-  outline: 1px solid red;
+    height: 200px;
+    width: 200px;
+    outline: 1px solid red;
 }
 
 #instant-keyboard input {
-  outline: 1px solid blue;
+    outline: 1px solid blue;
 }
 
 #input-type {
-  /* position: absolute; */
-  /* top: 20px; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 110px;
+    /* position: absolute; */
+    /* top: 20px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 110px;
 }
 
 #input-type button {
-  width: 122px;
-  height: 68px;
-  padding-top: 13px;
+    width: 122px;
+    height: 68px;
+    padding-top: 13px;
 }
 
 #input-type .keyboard-control img {
-  /* padding: 5px; */
-  vertical-align: super;
+    /* padding: 5px; */
+    vertical-align: super;
 }
 
 .direction-row {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .row {
-  display: flex;
-  justify-content: space-around;
-  margin: 15px;
+    display: flex;
+    justify-content: space-around;
+    margin: 15px;
 }
 
 .row button {
-  width: 122px;
-  height: 51px;
+    width: 122px;
+    height: 51px;
 }
 
 .rotate90 {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .rotate180 {
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .rotate270 {
-  -webkit-transform: rotate(270deg);
-  -moz-transform: rotate(270deg);
-  -o-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
 }
 
 .direction-row button {
-  /* background: transparent; */
-  margin: 5px;
-  padding: 0;
-  border-radius: 40px;
+    /* background: transparent; */
+    margin: 5px;
+    padding: 0;
+    border-radius: 40px;
 }
 
 .direction-row .direction-img {
-  padding: 30px;
+    padding: 30px;
 }
 
 .direction-row button:active {
-  /* background: black; */
-  background: linear-gradient(
-    transparent,
-    rgba(0, 0, 0, 0.05) 40%,
-    rgba(0, 0, 0, 0.1)
-  );
+    /* background: black; */
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.05) 40%,
+        rgba(0, 0, 0, 0.1)
+    );
 }
 
 #help-button {
-  width: 30px !important;
-  height: 30px !important;
-  padding: 0 !important;
-  margin: 10px;
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  background: transparent;
-  font-size: 16px;
-  font-weight: bold;
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    margin: 10px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background: transparent;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #normal-control {
-  flex: 1;
-  justify-content: center;
+    flex: 1;
+    justify-content: center;
 }
 </style>
