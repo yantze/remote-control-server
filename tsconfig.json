@@ -12,14 +12,14 @@
     "baseUrl": ".",
     "types": ["node"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["client/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
+    "client/**/*.ts",
+    "client/**/*.tsx",
+    "client/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
