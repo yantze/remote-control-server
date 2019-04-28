@@ -86,6 +86,7 @@
 import Hammer from 'hammerjs'
 import io from 'socket.io-client'
 import Vue from 'vue'
+import _ from 'lodash'
 
 // const socket = io(location.origin)
 const socket = io(location.hostname + ':3399')
@@ -128,6 +129,7 @@ export default Vue.extend({
   },
   created() {
     this.initOptions()
+    this.moveThrottle = _.throttle(this.move, 20)
   },
   mounted() {
     if (this.$refs.trackPad) {
@@ -136,23 +138,18 @@ export default Vue.extend({
   },
   methods: {
     empty() {},
+    move(touch) {
+      const distanceX = touch.clientX - mousePos.clientX
+      const distanceY = touch.clientY - mousePos.clientY
+      socket.emit('WS_MOUSE_MOVE', {
+        x: distanceX * 1.5,
+        y: distanceY * 1.5,
+      })
+    },
     touchMove(event) {
       if (event.touches.length === 1) {
         const touch = event.touches[0]
-        const now = Date.now()
-        const duration =  now - mousePos.timestamp
-
-        console.log('duration:', duration)
-        if (duration < 100) {
-          const distanceX = touch.clientX - mousePos.clientX
-          const distanceY = touch.clientY - mousePos.clientY
-          socket.emit('WS_MOUSE_MOVE', {
-            x: distanceX * 1.5,
-            y: distanceY * 1.5,
-          })
-        }
-
-        mousePos.timestamp = now
+        this.moveThrottle(touch)
         mousePos.clientX = touch.clientX
         mousePos.clientY = touch.clientY
       }
