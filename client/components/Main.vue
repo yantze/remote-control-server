@@ -129,7 +129,7 @@ export default Vue.extend({
   },
   created() {
     this.initOptions()
-    this.moveThrottle = _.throttle(this.move, 20)
+    this.moveThrottle = _.throttle(this.move, 10)
   },
   mounted() {
     if (this.$refs.trackPad) {
@@ -149,7 +149,17 @@ export default Vue.extend({
     touchMove(event) {
       if (event.touches.length === 1) {
         const touch = event.touches[0]
-        this.moveThrottle(touch)
+
+        const now = Date.now()
+        const duration =  now - mousePos.timestamp
+
+        // console.log('duration:', duration)
+        if (duration < 100) {
+          this.moveThrottle(touch)
+        }
+
+        mousePos.timestamp = now
+
         mousePos.clientX = touch.clientX
         mousePos.clientY = touch.clientY
       }

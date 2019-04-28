@@ -7,6 +7,7 @@
     "start": "node ./bin/www",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-watch": "vue-cli-service build --watch",
     "lint": "vue-cli-service lint"
   },
   "keywords": [
