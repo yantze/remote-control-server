@@ -7,6 +7,9 @@
           <button class="pure-button keyboard-control" @click="selectInputType('keyboardSimple')">
               <img class="" src="/img/control.svg" alt="Switch to control"/>
           </button>
+          <button class="pure-button" @click="selectInputType('transfer')">
+              <img class="" src="/img/control.svg" alt="Switch to transfer"/>
+          </button>
           <button class="pure-button" id="help-button" @click="toggleHelp" alt="Display help page"> ? </button>
         </div>
         <div id="main" class="flex flex-column flex-expand">
@@ -60,6 +63,11 @@
             </div>
 
             <!-- <div id="log">{{log}}</div> -->
+          </div>
+          <div v-show="options.selectedInputType=='transfer'">
+            <textarea name="clipboard" id="clipboard" cols="30" rows="10" v-model="clipboard"></textarea>
+            <button @click="sendClipboard">Send</button>
+            <button @click="reciveClipboard">Recive</button>
           </div>
           <div v-show="options.selectedInputType=='help'" id="help">
             <ul>
@@ -120,6 +128,7 @@ export default Vue.extend({
     return {
       input: '# hello',
       msg: 'bbb',
+      clipboard: '',
       lastPosition: [],
       lastSelected: 'keyboardSimple',
       options: {
@@ -237,6 +246,16 @@ export default Vue.extend({
     selectInputType(type) {
       this.setOptions({
         selectedInputType: type,
+      })
+    },
+    sendClipboard() {
+      socket.emit('WS_CLIPBOARD_PUSH', {
+        data: this.clipboard,
+      })
+    },
+    reciveClipboard() {
+      socket.emit('WS_CLIPBOARD_PULL', data => {
+        this.clipboard = data
       })
     },
     toggleHelp() {

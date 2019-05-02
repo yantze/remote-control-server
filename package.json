@@ -20,6 +20,8 @@
   "repository": "https://github.com/yantze/remote-control-server",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@uppy/core": "^1.0.0",
+    "clipboardy": "^2.0.0",
     "express": "^4.16.3",
     "lodash": "^4.17.11",
     "register-service-worker": "^1.0.0",
