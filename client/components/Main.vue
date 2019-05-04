@@ -68,6 +68,15 @@
             <textarea name="clipboard" id="clipboard" cols="30" rows="10" v-model="clipboard"></textarea>
             <button @click="sendClipboard">Send</button>
             <button @click="reciveClipboard">Recive</button>
+              <div>
+              <h5>autoProceed is on</h5>
+
+              <!-- Target DOM node #1 -->
+              <div class="UppyDragDrop-One"></div>
+
+              <!-- Progress bar #1 -->
+              <div class="UppyDragDrop-One-Progress"></div>
+            </div>
           </div>
           <div v-show="options.selectedInputType=='help'" id="help">
             <ul>
@@ -95,6 +104,15 @@ import Hammer from 'hammerjs'
 import io from 'socket.io-client'
 import Vue from 'vue'
 import _ from 'lodash'
+
+import { Uppy } from '@uppy/core'
+import DragDrop from '@uppy/drag-drop'
+import ProgressBar from '@uppy/progress-bar'
+import Tus from '@uppy/tus'
+
+require('@uppy/core/dist/style.css')
+require('@uppy/drag-drop/dist/style.css')
+require('@uppy/progress-bar/dist/style.css')
 
 // const socket = io(location.origin)
 const socket = io(location.hostname + ':3399')
@@ -144,6 +162,11 @@ export default Vue.extend({
     if (this.$refs.trackPad) {
       this.handleTrackPad(this.$refs.trackPad)
     }
+    const uppyOne = new Uppy({debug: true, autoProceed: true})
+    uppyOne.use(DragDrop, {target: '.UppyDragDrop-One'})
+      .use(Tus, {endpoint: 'http://localhost:3399/uploads'})
+      .use(ProgressBar, {target: '.UppyDragDrop-One-Progress', hideAfterFinish: false})
+
   },
   methods: {
     empty() {},

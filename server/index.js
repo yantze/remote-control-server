@@ -9,7 +9,17 @@ const robot = require('robotjs')
 
 const handleSocket = require('./socket.js')
 
+// Upload server
+const tus = require('tus-node-server')
+const tusServer = new tus.Server()
+tusServer.datastore = new tus.FileStore({
+    path: '/files'
+});
+app.use('/uploads', tusServer.handle.bind(tusServer))
+
+
 app.use(express.static(path.resolve(__dirname, '../dist')))
+
 
 io.on('connection', socket => handleSocket(socket, robot))
 

@@ -21,13 +21,17 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@uppy/core": "^1.0.0",
+    "@uppy/drag-drop": "^1.0.0",
+    "@uppy/progress-bar": "^1.0.0",
+    "@uppy/tus": "^1.0.0",
     "clipboardy": "^2.0.0",
     "express": "^4.16.3",
     "lodash": "^4.17.11",
     "register-service-worker": "^1.0.0",
     "robotjs": "^0.5.1",
     "seamless-immutable": "^7.1.4",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "tus-node-server": "^0.3.2"
   },
   "devDependencies": {
     "@types/hammerjs": "^2.0.35",
