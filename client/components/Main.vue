@@ -164,8 +164,8 @@ export default Vue.extend({
     }
     const uppyOne = new Uppy({debug: true, autoProceed: true})
     uppyOne.use(DragDrop, {target: '.UppyDragDrop-One'})
-      .use(Tus, {endpoint: 'http://localhost:3399/uploads'})
-      .use(ProgressBar, {target: '.UppyDragDrop-One-Progress', hideAfterFinish: false})
+      .use(Tus, {endpoint: 'http://172.20.10.4:3399/upload'})
+      .use(ProgressBar, {target: '.UppyDragDrop-One-Progress', hideAfterFinish: true})
 
   },
   methods: {

@@ -29,8 +29,6 @@ const pressedToState = {
     false: 'up',
 }
 
-let flag = true
-
 module.exports = function(socket, robot) {
     function moveMouse({ x, y }) {
         const pos = robot.getMousePos()
