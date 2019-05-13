@@ -2,9 +2,8 @@
 
 Remote control your computer keyboard and trackpad.
 
-## Install
-
-```bash
+## Dev
+```
 git clone https://github.com/yantze/remote-control-server
 
 cd remote-control-server

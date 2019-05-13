@@ -13,11 +13,11 @@ const handleSocket = require('./socket.js')
 const tus = require('tus-node-server')
 const tusServer = new tus.Server()
 tusServer.datastore = new tus.FileStore({
-    directory: path.join(__dirname, '..', 'dist', 'upload-files'),
-    relativeLocation: false,
-    path: '-files'
+    directory: path.join(__dirname, '..', 'dist', 'files'),
+    // relativeLocation: true,
+    path: '/files'
 })
-app.use('/upload', tusServer.handle.bind(tusServer))
+app.use('/uploads', tusServer.handle.bind(tusServer))
 
 
 app.use(express.static(path.resolve(__dirname, '../dist')))

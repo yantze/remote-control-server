@@ -1,6 +1,9 @@
 <template>
     <div class="flex flex-column flex-expand">
         <div id="input-type" @touchmove.prevent="empty">
+          <button class="pure-button" @click="toggleHelp">
+              ?
+          </button>
           <button class="pure-button" @click="selectInputType('trackPad')">
               <img class="" src="/img/trackpad.svg" alt="Switch to trackpad"/>
           </button>
@@ -10,7 +13,6 @@
           <button class="pure-button" @click="selectInputType('transfer')">
               <img class="" src="/img/control.svg" alt="Switch to transfer"/>
           </button>
-          <button class="pure-button" id="help-button" @click="toggleHelp" alt="Display help page"> ? </button>
         </div>
         <div id="main" class="flex flex-column flex-expand">
           <div v-show="options.selectedInputType=='trackPad'" ref="trackPad"
@@ -66,9 +68,12 @@
           </div>
           <div v-show="options.selectedInputType=='transfer'">
             <textarea name="clipboard" id="clipboard" cols="30" rows="10" v-model="clipboard"></textarea>
-            <button @click="sendClipboard">Send</button>
-            <button @click="reciveClipboard">Recive</button>
-              <div>
+            <div>
+              <button @click="sendClipboard">Send</button>
+              <button @click="reciveClipboard">Recive</button>
+            </div>
+
+            <div>
               <h5>autoProceed is on</h5>
 
               <!-- Target DOM node #1 -->
@@ -162,10 +167,24 @@ export default Vue.extend({
     if (this.$refs.trackPad) {
       this.handleTrackPad(this.$refs.trackPad)
     }
-    const uppyOne = new Uppy({debug: true, autoProceed: true})
+    const uppyOne = new Uppy({autoProceed: true})
     uppyOne.use(DragDrop, {target: '.UppyDragDrop-One'})
-      .use(Tus, {endpoint: 'http://172.20.10.4:3399/upload'})
+      .use(Tus, {endpoint: `${location.origin}/uploads`})
       .use(ProgressBar, {target: '.UppyDragDrop-One-Progress', hideAfterFinish: true})
+
+    uppyOne.on('complete', result => {
+      if (result.successful.length > 0) {
+        const items = result.successful.map(item => {
+          const fileId = item.uploadURL.slice(item.uploadURL.lastIndexOf('/') + 1)
+          return {
+            url: `${location.origin}/files/${fileId}`,
+          }
+        })
+        console.log('items:', items)
+      } else {
+        console.log('failed files:', result.failed)
+      }
+    })
 
   },
   methods: {
