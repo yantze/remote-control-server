@@ -1,38 +1,38 @@
 <template>
-    <div class="flex flex-column flex-expand">
-        <div id="input-type" @touchmove.prevent="empty">
-          <button class="pure-button" @click="toggleHelp">
+    <div class="d-flex flex-column h-100">
+        <div id="input-type" class="d-flex justify-content-center align-items-center" style="height: 111px;" @touchmove.prevent="empty">
+          <button class="btn btn-light nav-btn" @click="toggleHelp">
               ?
           </button>
-          <button class="pure-button" @click="selectInputType('trackPad')">
+          <button class="btn btn-light nav-btn" @click="selectInputType('trackPad')">
               <img class="" src="/img/trackpad.svg" alt="Switch to trackpad"/>
           </button>
-          <button class="pure-button keyboard-control" @click="selectInputType('keyboardSimple')">
+          <button class="btn btn-light nav-btn" @click="selectInputType('keyboardSimple')">
               <img class="" src="/img/control.svg" alt="Switch to control"/>
           </button>
-          <button class="pure-button" @click="selectInputType('transfer')">
+          <button class="btn btn-light nav-btn" @click="selectInputType('transfer')">
               <img class="" src="/img/control.svg" alt="Switch to transfer"/>
           </button>
         </div>
-        <div id="main" class="flex flex-column flex-expand">
+        <div id="main" class="flex-height-expand">
           <div v-show="options.selectedInputType=='trackPad'" ref="trackPad"
-            id="trackpad" class="flex flex-column flex-expand" @touchmove.prevent="touchMove"></div>
+            class="h-100" @touchmove.prevent="touchMove"></div>
           <div v-show="options.selectedInputType=='keyboardSimple'"
             id="keyboard-simple" class="flex flex-column flex-expand" @touchmove.prevent="empty">
             <div id="direction-control">
               <div class="direction-row">
-                <button class="pure-button" @click="clickKey('up')">
+                <button class="btn btn-light" @click="clickKey('up')">
                   <img class="direction-img rotate270" src="/img/direction.svg" alt="Up"/>
                 </button>
               </div>
               <div class="direction-row">
-                <button class="pure-button" @click="clickKey('left')">
+                <button class="btn btn-light" @click="clickKey('left')">
                   <img class="direction-img rotate180" src="/img/direction.svg" alt="Left"/>
                 </button>
-                <button class="pure-button" @click="clickKey('down')">
+                <button class="btn btn-light" @click="clickKey('down')">
                   <img class="direction-img rotate90" src="/img/direction.svg" alt="Down"/>
                 </button>
-                <button class="pure-button" @click="clickKey('right')">
+                <button class="btn btn-light" @click="clickKey('right')">
                   <img class="direction-img" src="/img/direction.svg" alt="Right"/>
                 </button>
               </div>
@@ -40,27 +40,27 @@
 
             <div id="function-control">
               <div class="row">
-                <button class="pure-button" @click="clickKey('volMute')">Mute</button>
-                <button class="pure-button" @click="clickKey('volDown')">Vol-</button>
-                <button class="pure-button" @click="clickKey('volUp')">Vol+</button>
+                <button class="btn btn-light" @click="clickKey('volMute')">Mute</button>
+                <button class="btn btn-light" @click="clickKey('volDown')">Vol-</button>
+                <button class="btn btn-light" @click="clickKey('volUp')">Vol+</button>
               </div>
 
               <!-- <div class="row">
-                <button class="pure-button" @click="clickAudioPrev">向后</button>
-                <button class="pure-button" @click="clickAudioPlay">播放</button>
-                <button class="pure-button" @click="clickAudioNext">向前</button>
+                <button class="btn btn-light" @click="clickAudioPrev">向后</button>
+                <button class="btn btn-light" @click="clickAudioPlay">播放</button>
+                <button class="btn btn-light" @click="clickAudioNext">向前</button>
               </div> -->
 
             </div>
             <div id="normal-control" class="flex flex-column">
               <div class="row">
-                <button class="pure-button" @click="clickKey('tab')">Tab</button>
-                <button class="pure-button" @click="clickKey('esc')">Esc</button>
+                <button class="btn btn-light" @click="clickKey('tab')">Tab</button>
+                <button class="btn btn-light" @click="clickKey('esc')">Esc</button>
               </div>
 
               <div class="row">
-                <button class="pure-button" @click="clickKey('enter')">Enter</button>
-                <button class="pure-button" @click="clickKey('space')">Space</button>
+                <button class="btn btn-light" @click="clickKey('enter')">Enter</button>
+                <button class="btn btn-light" @click="clickKey('space')">Space</button>
               </div>
             </div>
 
@@ -115,9 +115,9 @@ import DragDrop from '@uppy/drag-drop'
 import ProgressBar from '@uppy/progress-bar'
 import Tus from '@uppy/tus'
 
-require('@uppy/core/dist/style.css')
-require('@uppy/drag-drop/dist/style.css')
-require('@uppy/progress-bar/dist/style.css')
+import '@uppy/core/dist/style.css'
+import '@uppy/drag-drop/dist/style.css'
+import '@uppy/progress-bar/dist/style.css'
 
 // const socket = io(location.origin)
 const socket = io(location.hostname + ':3399')
@@ -146,7 +146,6 @@ const keyMap = {
 }
 
 export default Vue.extend({
-  //   el: "#container",
   data() {
     return {
       input: '# hello',
@@ -361,13 +360,9 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-#container {
-    height: 100vh;
-}
-
-#trackpad {
-    display: flex;
-    flex: 1;
+.nav-btn {
+    width: 122px; height: 68px;
+    /* padding-top: 13px;  */
 }
 
 #keyboard {
@@ -406,27 +401,6 @@ export default Vue.extend({
 
 #instant-keyboard input {
     outline: 1px solid blue;
-}
-
-#input-type {
-    /* position: absolute; */
-    /* top: 20px; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 110px;
-}
-
-#input-type button {
-    width: 122px;
-    height: 68px;
-    padding-top: 13px;
-}
-
-#input-type .keyboard-control img {
-    /* padding: 5px; */
-    vertical-align: super;
 }
 
 .direction-row {
