@@ -1,106 +1,130 @@
 <template>
     <div class="d-flex flex-column h-100">
-        <div id="input-type" class="d-flex justify-content-center align-items-center" style="height: 111px;" @touchmove.prevent="empty">
-          <button class="btn btn-light nav-btn" @click="toggleHelp">
-              ?
-          </button>
-          <button class="btn btn-light nav-btn" @click="selectInputType('trackPad')">
-              <img class="" src="/img/trackpad.svg" alt="Switch to trackpad"/>
-          </button>
-          <button class="btn btn-light nav-btn" @click="selectInputType('keyboardSimple')">
-              <img class="" src="/img/control.svg" alt="Switch to control"/>
-          </button>
-          <button class="btn btn-light nav-btn" @click="selectInputType('transfer')">
-              <img class="" src="/img/control.svg" alt="Switch to transfer"/>
-          </button>
+      <div id="input-type" class="d-flex justify-content-center align-items-center" style="height: 111px;" @touchmove.prevent="empty">
+        <button class="btn btn-light nav-btn" @click="toggleHelp">
+            ?
+        </button>
+        <button class="btn btn-light nav-btn" @click="selectInputType('trackPad')">
+            <img class="" src="/img/trackpad.svg" alt="Switch to trackpad"/>
+        </button>
+        <button class="btn btn-light nav-btn" @click="selectInputType('keyboardSimple')">
+            <img class="" src="/img/control.svg" alt="Switch to control"/>
+        </button>
+        <button class="btn btn-light nav-btn" @click="selectInputType('transfer')">
+            <img class="" src="/img/control.svg" alt="Switch to transfer"/>
+        </button>
+      </div>
+      <div class="flex-height-expand">
+        <div v-show="options.selectedInputType=='trackPad'" ref="trackPad"
+          class="h-100" @touchmove.prevent="touchMove"></div>
+        <div v-show="options.selectedInputType=='keyboardSimple'"
+          class="container h-100" @touchmove.prevent="empty">
+          <div class="row my-3">
+            <div class="col">
+              <button class="btn btn-light btn-block mx-auto" @click="clickKey('up')">
+                <img class="direction-img rotate270" src="/img/direction.svg" alt="Up"/>
+              </button>
+            </div>
+          </div>
+          <div class="row my-4">
+            <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
+              <button class="btn btn-light" @click="clickKey('left')">
+                <img class="direction-img rotate180" src="/img/direction.svg" alt="Left"/>
+              </button>
+              <button class="btn btn-light" @click="clickKey('down')">
+                <img class="direction-img rotate90" src="/img/direction.svg" alt="Down"/>
+              </button>
+              <button class="btn btn-light" @click="clickKey('right')">
+                <img class="direction-img" src="/img/direction.svg" alt="Right"/>
+              </button>
+            </div>
+          </div>
+
+          <div class="row my-4">
+            <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
+              <button class="btn btn-light" @click="clickKey('volMute')">Mute</button>
+              <button class="btn btn-light" @click="clickKey('volDown')">Vol-</button>
+              <button class="btn btn-light" @click="clickKey('volUp')">Vol+</button>
+            </div>
+          </div>
+
+          <!-- <div class="row">
+            <button class="btn btn-light" @click="clickAudioPrev">向后</button>
+            <button class="btn btn-light" @click="clickAudioPlay">播放</button>
+            <button class="btn btn-light" @click="clickAudioNext">向前</button>
+          </div> -->
+
+          <div class="row my-4">
+            <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
+              <button class="btn btn-light" @click="clickKey('tab')">Tab</button>
+              <button class="btn btn-light" @click="clickKey('esc')">Esc</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
+              <button class="btn btn-light" @click="clickKey('enter')">Enter</button>
+              <button class="btn btn-light" @click="clickKey('space')">Space</button>
+            </div>
+          </div>
+
+          <!-- <div id="log">{{log}}</div> -->
         </div>
-        <div id="main" class="flex-height-expand">
-          <div v-show="options.selectedInputType=='trackPad'" ref="trackPad"
-            class="h-100" @touchmove.prevent="touchMove"></div>
-          <div v-show="options.selectedInputType=='keyboardSimple'"
-            id="keyboard-simple" class="flex flex-column flex-expand" @touchmove.prevent="empty">
-            <div id="direction-control">
-              <div class="direction-row">
-                <button class="btn btn-light" @click="clickKey('up')">
-                  <img class="direction-img rotate270" src="/img/direction.svg" alt="Up"/>
-                </button>
-              </div>
-              <div class="direction-row">
-                <button class="btn btn-light" @click="clickKey('left')">
-                  <img class="direction-img rotate180" src="/img/direction.svg" alt="Left"/>
-                </button>
-                <button class="btn btn-light" @click="clickKey('down')">
-                  <img class="direction-img rotate90" src="/img/direction.svg" alt="Down"/>
-                </button>
-                <button class="btn btn-light" @click="clickKey('right')">
-                  <img class="direction-img" src="/img/direction.svg" alt="Right"/>
-                </button>
-              </div>
-            </div>
+        <div v-show="options.selectedInputType=='transfer'">
+          <!-- <textarea name="clipboard" id="clipboard" cols="30" rows="10" v-model="clipboard"></textarea> -->
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+          </button>
 
-            <div id="function-control">
-              <div class="row">
-                <button class="btn btn-light" @click="clickKey('volMute')">Mute</button>
-                <button class="btn btn-light" @click="clickKey('volDown')">Vol-</button>
-                <button class="btn btn-light" @click="clickKey('volUp')">Vol+</button>
-              </div>
-
-              <!-- <div class="row">
-                <button class="btn btn-light" @click="clickAudioPrev">向后</button>
-                <button class="btn btn-light" @click="clickAudioPlay">播放</button>
-                <button class="btn btn-light" @click="clickAudioNext">向前</button>
-              </div> -->
-
-            </div>
-            <div id="normal-control" class="flex flex-column">
-              <div class="row">
-                <button class="btn btn-light" @click="clickKey('tab')">Tab</button>
-                <button class="btn btn-light" @click="clickKey('esc')">Esc</button>
-              </div>
-
-              <div class="row">
-                <button class="btn btn-light" @click="clickKey('enter')">Enter</button>
-                <button class="btn btn-light" @click="clickKey('space')">Space</button>
-              </div>
-            </div>
-
-            <!-- <div id="log">{{log}}</div> -->
-          </div>
-          <div v-show="options.selectedInputType=='transfer'">
-            <textarea name="clipboard" id="clipboard" cols="30" rows="10" v-model="clipboard"></textarea>
-            <div>
-              <button @click="sendClipboard">Send</button>
-              <button @click="reciveClipboard">Recive</button>
-            </div>
-
-            <div>
-              <h5>autoProceed is on</h5>
-
-              <!-- Target DOM node #1 -->
-              <div class="UppyDragDrop-One"></div>
-
-              <!-- Progress bar #1 -->
-              <div class="UppyDragDrop-One-Progress"></div>
-            </div>
-          </div>
-          <div v-show="options.selectedInputType=='help'" id="help">
-            <ul>
-              <li>触控板按钮:空白界面，通过手指滑动来移动指针, 支持手势。</li>
-              <li>遥控按钮:常用的按键。</li>
-              <li>可以去 <a href="https://github.com/yantze/remote-control-server/issues">这里</a> 反馈</li>
-              <li>或者给我发送邮件 <a href="mailto:yantze@126.com">yantze@126.com</a></li>
-            </ul>
-          </div>
-          <div v-if="options.selectedInputType=='keyboardOriginal'" id="keyboard-original">
-              <input type="password" value=" " style="ime-mode: disabled"/>
-          </div>
-        </div>
-        <!-- <div id="keyboard">
-            <div id="keyboard-type">
-                <div id="instant-keyboard">
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 </div>
+                <div class="modal-body">
+                  ...
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
             </div>
-        </div> -->
+          </div>
+
+          <div>
+            <button @click="sendClipboard">Send</button>
+            <button @click="reciveClipboard">Recive</button>
+          </div>
+
+          <div>
+            <h5>autoProceed is on</h5>
+
+            <!-- Target DOM node #1 -->
+            <div class="UppyDragDrop-One"></div>
+
+            <!-- Progress bar #1 -->
+            <div class="UppyDragDrop-One-Progress"></div>
+          </div>
+        </div>
+        <div v-show="options.selectedInputType=='help'" id="help">
+          <ul>
+            <li>触控板按钮:空白界面，通过手指滑动来移动指针, 支持手势。</li>
+            <li>遥控按钮:常用的按键。</li>
+            <li>可以去 <a href="https://github.com/yantze/remote-control-server/issues">这里</a> 反馈</li>
+            <li>或者给我发送邮件 <a href="mailto:yantze@126.com">yantze@126.com</a></li>
+          </ul>
+        </div>
+        <div v-if="options.selectedInputType=='keyboardOriginal'" id="keyboard-original">
+            <input type="password" value=" " style="ime-mode: disabled"/>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -365,54 +389,16 @@ export default Vue.extend({
     /* padding-top: 13px;  */
 }
 
-#keyboard {
-    display: flex;
-    height: 200px;
-    outline: 1px solid red;
-}
-
-#keyboard-simple {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
 
 @media screen and (min-width: 425px) {
-    #keyboard-simple {
-        display: flex;
-    }
-
     #direction-control {
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
 
-    .direction-row button.pure-button {
-        padding: 2px 4px;
-    }
 }
 
-#instant-keyboard {
-    height: 200px;
-    width: 200px;
-    outline: 1px solid red;
-}
-
-#instant-keyboard input {
-    outline: 1px solid blue;
-}
-
-.direction-row {
-    display: flex;
-    justify-content: center;
-}
-
-.row {
-    display: flex;
-    justify-content: space-around;
-    margin: 15px;
-}
 
 .row button {
     width: 122px;
