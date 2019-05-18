@@ -185,6 +185,10 @@ export default Vue.extend({
   created() {
     this.initOptions()
     this.moveThrottle = _.throttle(this.move, 10)
+
+    // socket.on('active push', (...args) => {
+    //   console.log('----------------:', ...args)
+    // })
   },
   mounted() {
     if (this.$refs.trackPad) {

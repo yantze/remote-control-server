@@ -96,6 +96,7 @@ module.exports = function(socket, robot) {
     })
 
     socket.on(c.WS_CLIPBOARD_PULL, (cb) => {
+        // socket.emit('active push', {aa: 'aa'})
         if (typeof cb === 'function') clipboard.read().then(cb)
     })
 
