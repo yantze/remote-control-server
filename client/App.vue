@@ -17,31 +17,11 @@ export default Vue.extend({
 </script>
 
 <style>
-
 html, body {
-  /* margin: 0;
-  padding: 0; */
   background-color: #F2F2F2;
 
   touch-action: manipulation;
   overflow:hidden;
   -webkit-app-region: no-drag;
-
 }
-
-/* =========== Library: Layout ============= */
-
-.flex-expand {
-  flex: 1;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.flex {
-  display: flex;
-}
-
-
 </style>

@@ -100,8 +100,9 @@ module.exports = function(socket, robot) {
         if (typeof cb === 'function') clipboard.read().then(cb)
     })
 
-    socket.on(c.WS_CLIPBOARD_PUSH, ({data}) => {
+    socket.on(c.WS_CLIPBOARD_PUSH, ({data}, cb) => {
         if (data) clipboard.write(data)
+        if (typeof cb === 'function') cb()
     })
 }
 

@@ -70,10 +70,27 @@
 
           <!-- <div id="log">{{log}}</div> -->
         </div>
-        <div v-show="options.selectedInputType=='transfer'">
-          <!-- <textarea name="clipboard" id="clipboard" cols="30" rows="10" v-model="clipboard"></textarea> -->
+        <div v-show="options.selectedInputType=='transfer'" class="container">
+          <label>{{ tips }}</label>
+
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <textarea name="clipboard" class="form-control" rows="2" v-model="clipboard"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col d-flex">
+              <button class="btn btn-light" @click="sendClipboard">Send</button>
+              <button class="btn btn-light" @click="reciveClipboard">Recive</button>
+              <button class="btn btn-light" @click="clipboard = ''">Clear</button>
+            </div>
+          </div>
+
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">
             Launch demo modal
           </button>
 
@@ -96,11 +113,6 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <div>
-            <button @click="sendClipboard">Send</button>
-            <button @click="reciveClipboard">Recive</button>
           </div>
 
           <div>
@@ -180,6 +192,7 @@ export default Vue.extend({
       options: {
         selectedInputType: 'keyboardSimple',
       },
+      tips: '',
     }
   },
   created() {
@@ -320,6 +333,8 @@ export default Vue.extend({
     sendClipboard() {
       socket.emit('WS_CLIPBOARD_PUSH', {
         data: this.clipboard,
+      }, () => {
+        this.tips = 'Success'
       })
     },
     reciveClipboard() {
@@ -390,19 +405,7 @@ export default Vue.extend({
 <style scoped>
 .nav-btn {
     width: 122px; height: 68px;
-    /* padding-top: 13px;  */
 }
-
-
-@media screen and (min-width: 425px) {
-    #direction-control {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-}
-
 
 .row button {
     width: 122px;
@@ -431,43 +434,5 @@ export default Vue.extend({
     -o-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
     transform: rotate(270deg);
-}
-
-.direction-row button {
-    /* background: transparent; */
-    margin: 5px;
-    padding: 0;
-    border-radius: 40px;
-}
-
-.direction-row .direction-img {
-    padding: 30px;
-}
-
-.direction-row button:active {
-    /* background: black; */
-    background: linear-gradient(
-        transparent,
-        rgba(0, 0, 0, 0.05) 40%,
-        rgba(0, 0, 0, 0.1)
-    );
-}
-
-#help-button {
-    width: 30px !important;
-    height: 30px !important;
-    padding: 0 !important;
-    margin: 10px;
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    background: transparent;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-#normal-control {
-    flex: 1;
-    justify-content: center;
 }
 </style>
