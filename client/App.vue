@@ -17,11 +17,12 @@ export default Vue.extend({
 </script>
 
 <style>
-html, body {
-  background-color: #F2F2F2;
+html,
+body {
+  background-color: #f2f2f2;
 
   touch-action: manipulation;
-  overflow:hidden;
+  overflow: hidden;
   -webkit-app-region: no-drag;
 }
 </style>

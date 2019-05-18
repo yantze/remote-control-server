@@ -15,13 +15,11 @@ const tusServer = new tus.Server()
 tusServer.datastore = new tus.FileStore({
     directory: path.join(__dirname, '..', 'dist', 'files'),
     // relativeLocation: true,
-    path: '/files'
+    path: '/files',
 })
 app.use('/uploads', tusServer.handle.bind(tusServer))
 
-
 app.use(express.static(path.resolve(__dirname, '../dist')))
-
 
 io.on('connection', socket => handleSocket(socket, robot))
 
@@ -35,9 +33,7 @@ function startServer({ port } = {}) {
     const ifaces = os.networkInterfaces()
     return http.listen(port, function() {
         Object.keys(ifaces).forEach(ifname =>
-            ifaces[ifname].forEach(iface =>
-                console.log('listening on', iface.address, 'and port', port),
-            ),
+            ifaces[ifname].forEach(iface => console.log('listening on', iface.address, 'and port', port)),
         )
     })
 }
