@@ -28,5 +28,10 @@
     "max-line-length": {
       "options": [120]
     }
+  },
+  "settings": {
+    "import/resolver": {
+      "import/extensions": [".js", ".jsx", ".mjs", ".ts", ".tsx", ".vue"]
+    }
   }
 }

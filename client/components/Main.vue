@@ -18,12 +18,7 @@
       </button>
     </div>
     <div class="flex-height-expand">
-      <div
-        v-show="options.selectedInputType=='trackPad'"
-        ref="trackPad"
-        class="h-100"
-        @touchmove.prevent="touchMove"
-      ></div>
+      <TrackPad></TrackPad>
       <div
         v-show="options.selectedInputType=='keyboardSimple'"
         class="container h-100"
@@ -167,13 +162,14 @@
 <script lang="ts">
 import Hammer from 'hammerjs'
 import io from 'socket.io-client'
-import Vue from 'vue'
 import _ from 'lodash'
 
 import { Uppy } from '@uppy/core'
 import DragDrop from '@uppy/drag-drop'
 import ProgressBar from '@uppy/progress-bar'
 import Tus from '@uppy/tus'
+
+import TrackPad from './TrackPad.vue'
 
 import '@uppy/core/dist/style.css'
 import '@uppy/drag-drop/dist/style.css'
@@ -205,7 +201,10 @@ const keyMap = {
   audioPlayOrPause: 106,
 }
 
-export default Vue.extend({
+export default {
+  components: {
+    TrackPad,
+  },
   data() {
     return {
       input: '# hello',
@@ -430,7 +429,7 @@ export default Vue.extend({
       return localStorage.setItem('options', JSON.stringify(this.options))
     },
   },
-})
+}
 </script>
 
 <style scoped>
