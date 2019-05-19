@@ -95,12 +95,12 @@ module.exports = function(socket, robot) {
         robot.mouseToggle(state, button)
     })
 
-    socket.on(c.WS_CLIPBOARD_PULL, (cb) => {
-        // socket.emit('active push', {aa: 'aa'})
+    socket.on(c.WS_CLIPBOARD_PULL, cb => {
+    // socket.emit('customEmit', { aa: 'aa' })
         if (typeof cb === 'function') clipboard.read().then(cb)
     })
 
-    socket.on(c.WS_CLIPBOARD_PUSH, ({data}, cb) => {
+    socket.on(c.WS_CLIPBOARD_PUSH, ({ data }, cb) => {
         if (data) clipboard.write(data)
         if (typeof cb === 'function') cb()
     })

@@ -4,13 +4,21 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Main from './components/Main.vue'
 
 export default {
   name: 'app',
   components: {
     Main,
+  },
+  sockets: {
+    connect() {
+      console.log('socket connected')
+    },
+    customEmit(data) {
+      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', data)
+    },
   },
 }
 </script>

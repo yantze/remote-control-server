@@ -31,7 +31,9 @@
     "robotjs": "^0.5.1",
     "seamless-immutable": "^7.1.4",
     "socket.io": "^2.1.1",
-    "tus-node-server": "^0.3.2"
+    "tus-node-server": "^0.3.2",
+    "vue-socket.io": "^3.0.7",
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@types/hammerjs": "^2.0.35",
