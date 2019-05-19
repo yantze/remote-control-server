@@ -15,7 +15,6 @@ Vue.use(
       actionPrefix: 'SOCKET_',
       mutationPrefix: 'SOCKET_',
     },
-    // options: { path: '/my-app/' }, // Optional options
   }),
 )
 

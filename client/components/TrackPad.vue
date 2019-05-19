@@ -3,15 +3,55 @@
 </template>
 
 <script lang="ts">
-//     v-show="options.selectedInputType=='trackPad'"
+import Hammer from 'hammerjs'
+import _ from 'lodash'
+
+const mousePos = {
+  clientX: 0,
+  clientY: 0,
+  timestamp: Date.now(),
+}
+
 export default {
   name: 'TrackPad',
   data() {
     return {
-      info: 'hahahahha',
+      lastPosition: [],
     }
   },
+  created() {
+    this.moveThrottle = _.throttle(this.move, 10)
+  },
+  mounted() {
+    this.handleTrackPad(this.$refs.trackPad)
+  },
   methods: {
+    move(touch) {
+      const distanceX = touch.clientX - mousePos.clientX
+      const distanceY = touch.clientY - mousePos.clientY
+      this.$socket.emit('WS_MOUSE_MOVE', {
+        x: distanceX * 1.5,
+        y: distanceY * 1.5,
+      })
+    },
+    touchMove(event) {
+      if (event.touches.length === 1) {
+        const touch = event.touches[0]
+
+        const now = Date.now()
+        const duration = now - mousePos.timestamp
+
+        // console.log('duration:', duration)
+        if (duration < 100) {
+          this.moveThrottle(touch)
+        }
+
+        mousePos.timestamp = now
+
+        mousePos.clientX = touch.clientX
+        mousePos.clientY = touch.clientY
+      }
+    },
     handleTrackPad(ref) {
       const manager = new Hammer.Manager(ref)
 
