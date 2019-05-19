@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import Main from './components/Main.vue'
 
 export default {
@@ -12,14 +12,14 @@ export default {
   components: {
     Main,
   },
-  sockets: {
-    connect() {
-      console.log('socket connected')
-    },
-    customEmit(data) {
-      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', data)
-    },
-  },
+  // sockets: {
+  //   connect() {
+  //     console.log('socket connected')
+  //   },
+  //   customEmit(data) {
+  //     console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', data)
+  //   },
+  // },
 }
 </script>
 

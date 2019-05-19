@@ -19,7 +19,9 @@ Vue.use(
   }),
 )
 
-new Vue({
+const vm = new Vue({
   store,
   render: h => h(App),
 }).$mount('#app')
+
+window.$vm = vm
