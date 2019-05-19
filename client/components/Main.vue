@@ -6,21 +6,21 @@
       style="height: 111px;"
       @touchmove.prevent="empty"
     >
-      <button class="btn btn-light nav-btn" @click="toggleHelp">?</button>
-      <button class="btn btn-light nav-btn" @click="selectInputType('trackPad')">
+      <button class="btn btn-light nav-btn" @click="updateSelectInputType('help')">?</button>
+      <button class="btn btn-light nav-btn" @click="updateSelectInputType('trackPad')">
         <img class src="/img/trackpad.svg" alt="Switch to trackpad">
       </button>
-      <button class="btn btn-light nav-btn" @click="selectInputType('keyboardSimple')">
+      <button class="btn btn-light nav-btn" @click="updateSelectInputType('keyboardSimple')">
         <img class src="/img/control.svg" alt="Switch to control">
       </button>
-      <button class="btn btn-light nav-btn" @click="selectInputType('transfer')">
+      <button class="btn btn-light nav-btn" @click="updateSelectInputType('transfer')">
         <img class src="/img/control.svg" alt="Switch to transfer">
       </button>
     </div>
     <div class="flex-height-expand">
-      <TrackPad></TrackPad>
+      <TrackPad v-show="selectedInputType == 'trackPad'"></TrackPad>
       <div
-        v-show="options.selectedInputType=='keyboardSimple'"
+        v-show="selectedInputType=='keyboardSimple'"
         class="container h-100"
         @touchmove.prevent="empty"
       >
@@ -75,7 +75,7 @@
 
         <!-- <div id="log">{{log}}</div> -->
       </div>
-      <div v-show="options.selectedInputType=='transfer'" class="container">
+      <div v-show="selectedInputType=='transfer'" class="container">
         <label>{{ tips }}</label>
 
         <div class="row">
@@ -138,7 +138,7 @@
           <div class="UppyDragDrop-One-Progress"></div>
         </div>
       </div>
-      <div v-show="options.selectedInputType=='help'" id="help">
+      <div v-show="selectedInputType=='help'" id="help">
         <ul>
           <li>触控板按钮:空白界面，通过手指滑动来移动指针, 支持手势。</li>
           <li>遥控按钮:常用的按键。</li>
@@ -152,7 +152,7 @@
           </li>
         </ul>
       </div>
-      <div v-if="options.selectedInputType=='keyboardOriginal'" id="keyboard-original">
+      <div v-if="selectedInputType=='keyboardOriginal'" id="keyboard-original">
         <input type="password" value=" " style="ime-mode: disabled">
       </div>
     </div>
@@ -160,6 +160,8 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'vuex'
+
 import Hammer from 'hammerjs'
 import io from 'socket.io-client'
 import _ from 'lodash'
@@ -176,7 +178,11 @@ import '@uppy/drag-drop/dist/style.css'
 import '@uppy/progress-bar/dist/style.css'
 
 // const socket = io(location.origin)
-const socket = io(location.hostname + ':3399')
+// const socket = io(location.hostname + ':3399')
+const socket = {
+  emit: () => {},
+  on: () => {},
+}
 const mousePos = {
   clientX: 0,
   clientY: 0,
@@ -211,20 +217,18 @@ export default {
       msg: 'bbb',
       clipboard: '',
       lastPosition: [],
-      lastSelected: 'keyboardSimple',
-      options: {
-        selectedInputType: 'keyboardSimple',
-      },
       tips: '',
     }
   },
   created() {
-    this.initOptions()
     this.moveThrottle = _.throttle(this.move, 10)
 
     // socket.on('active push', (...args) => {
     //   console.log('----------------:', ...args)
     // })
+  },
+  computed: {
+    ...mapState(['selectedInputType']),
   },
   mounted() {
     if (this.$refs.trackPad) {
@@ -258,7 +262,7 @@ export default {
     move(touch) {
       const distanceX = touch.clientX - mousePos.clientX
       const distanceY = touch.clientY - mousePos.clientY
-      socket.emit('WS_MOUSE_MOVE', {
+      this.$socket.emit('WS_MOUSE_MOVE', {
         x: distanceX * 1.5,
         y: distanceY * 1.5,
       })
@@ -305,7 +309,7 @@ export default {
       manager.on('onetap', e => {
         //  e.target.classList.toggle('expand');
         console.log('one tap')
-        socket.emit('WS_MOUSE_CLICK', { button: 'left', double: false })
+        this.$socket.emit('WS_MOUSE_CLICK', { button: 'left', double: false })
       })
 
       const TwoTap = new Hammer.Tap({
@@ -320,7 +324,7 @@ export default {
       manager.on('twotap', e => {
         //  e.target.classList.toggle('expand');
         console.log('two tap')
-        socket.emit('WS_MOUSE_CLICK', { button: 'right', double: false })
+        this.$socket.emit('WS_MOUSE_CLICK', { button: 'right', double: false })
       })
 
       const TwoPan = new Hammer.Pan({
@@ -344,20 +348,18 @@ export default {
         }
         const distanceX = ev.deltaX - this.lastPosition[0]
         const distanceY = ev.deltaY - this.lastPosition[1]
-        socket.emit('WS_MOUSE_MOVE', {
+        this.$socket.emit('WS_MOUSE_MOVE', {
           x: distanceX * 0.5,
           y: distanceY * 0.5,
           scroll: true,
         })
       })
     },
-    selectInputType(type) {
-      this.setOptions({
-        selectedInputType: type,
-      })
+    updateSelectInputType(type) {
+      this.$store.commit('updateSelectedInputType', { type })
     },
     sendClipboard() {
-      socket.emit(
+      this.$socket.emit(
         'WS_CLIPBOARD_PUSH',
         {
           data: this.clipboard,
@@ -368,65 +370,33 @@ export default {
       )
     },
     reciveClipboard() {
-      socket.emit('WS_CLIPBOARD_PULL', data => {
+      this.$socket.emit('WS_CLIPBOARD_PULL', data => {
         this.clipboard = data
       })
     },
-    toggleHelp() {
-      if (this.options.selectedInputType === 'help') {
-        this.setOptions({
-          selectedInputType: this.lastSelected,
-        })
-      } else {
-        this.lastSelected = this.options.selectedInputType
-        this.setOptions({
-          selectedInputType: 'help',
-        })
-      }
-    },
     clickKey(key) {
       const keyCode = keyMap[key]
-      socket.emit('WS_KEY_PRESS', { code: keyCode })
+      this.$socket.emit('WS_KEY_PRESS', { code: keyCode })
     },
 
     leftClick(event) {
-      socket.emit('WS_MOUSE_CLICK', { button: 'left', double: false })
+      this.$socket.emit('WS_MOUSE_CLICK', { button: 'left', double: false })
     },
     middleClick(event) {
-      socket.emit('WS_MOUSE_CLICK', { button: 'middle', double: false })
+      this.$socket.emit('WS_MOUSE_CLICK', { button: 'middle', double: false })
     },
     rightClick(event) {
-      socket.emit('WS_MOUSE_CLICK', { button: 'right', double: false })
+      this.$socket.emit('WS_MOUSE_CLICK', { button: 'right', double: false })
     },
     leftDoubleClick(event) {
       this.msg = 'double click'
-      socket.emit('WS_MOUSE_CLICK', { button: 'left', double: true })
+      this.$socket.emit('WS_MOUSE_CLICK', { button: 'left', double: true })
     },
     middleDoubleClick(event) {
-      socket.emit('WS_MOUSE_CLICK', { button: 'middle', double: true })
+      this.$socket.emit('WS_MOUSE_CLICK', { button: 'middle', double: true })
     },
     rightDoubleClick(event) {
-      socket.emit('WS_MOUSE_CLICK', { button: 'right', double: true })
-    },
-    initOptions() {
-      const options = this.getOptions()
-      if (options) {
-        this.options = options
-      }
-    },
-    getOptions() {
-      const optionsStringify = localStorage.getItem('options')
-      let options = null
-      try {
-        options = JSON.parse(optionsStringify)
-      } catch (err) {
-        throw err
-      }
-      return options
-    },
-    setOptions(options) {
-      Object.assign(this.options, options)
-      return localStorage.setItem('options', JSON.stringify(this.options))
+      this.$socket.emit('WS_MOUSE_CLICK', { button: 'right', double: true })
     },
   },
 }
