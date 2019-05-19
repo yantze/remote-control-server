@@ -13,7 +13,7 @@
         <img class src="/img/control.svg" alt="Switch to control">
       </button>
       <button class="btn btn-light nav-btn" @click="updateSelectInputType('transfer')">
-        <img class src="/img/control.svg" alt="Switch to transfer">
+        <img class src="/img/transfer.svg" alt="Switch to transfer">
       </button>
     </div>
     <div class="flex-height-expand">
