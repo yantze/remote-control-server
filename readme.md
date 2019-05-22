@@ -10,16 +10,11 @@ cd remote-control-server
 
 npm i
 
+# build client
+npm run build
+
 # Start server
-npm run server
-```
-
-## Build
-```
 npm run start
-
-# or output files to dist
-npm run build-watch
 ```
 
 Then access "http://you-computer-ip-address:3399" by your phone.
