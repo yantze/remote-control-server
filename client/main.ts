@@ -23,4 +23,4 @@ const vm = new Vue({
   render: h => h(App),
 }).$mount('#app')
 
-window.$vm = vm
+// window.$vm = vm

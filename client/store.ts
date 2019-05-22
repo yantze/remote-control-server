@@ -5,7 +5,14 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const memento = store => {
-  store.commit('restoreMemento', JSON.parse(localStorage.getItem('memento') || '{}'))
+  let restoreMemento
+  try {
+    restoreMemento = JSON.parse(localStorage.getItem('memento') || '{}')
+  } catch (e) {
+    restoreMemento = {}
+    console.error(e)
+  }
+  store.commit('restoreMemento', restoreMemento)
   if (store.getters && 'memento' in store.getters) {
     store.watch(
       (_, getter) => getter['memento'],
@@ -30,7 +37,6 @@ const store = new Vuex.Store({
     memento: state => {
       const memento = {}
       if (state.selectedInputType) {
-        // tslint:disable-next-line
         memento['selectedInputType'] = state.selectedInputType
       }
       return memento
@@ -48,7 +54,6 @@ const store = new Vuex.Store({
       state.socketMessage = message
     },
 
-    // tslint:disable-next-line: no-shadowed-variable
     updateSelectedInputType(state, { type }) {
       state.selectedInputType = type
     },
