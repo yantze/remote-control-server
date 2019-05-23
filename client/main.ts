@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueSocketIO from 'vue-socket.io'
 import store from './store'
 // import './registerServiceWorker'
+import 'bootstrap-custom'
 
 Vue.config.productionTip = false
 

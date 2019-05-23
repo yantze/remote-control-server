@@ -24,6 +24,7 @@
     "@uppy/drag-drop": "^1.0.0",
     "@uppy/progress-bar": "^1.0.0",
     "@uppy/tus": "^1.0.0",
+    "bootstrap-custom": "file:client/vendor/bootstrap-custom",
     "clipboardy": "^2.0.0",
     "express": "^4.16.3",
     "lodash": "^4.17.11",
