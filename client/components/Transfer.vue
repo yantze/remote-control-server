@@ -19,12 +19,12 @@
     </div>
 
     <!-- Button trigger modal -->
-    <button
+    <!-- <button
       type="button"
       class="btn btn-link"
       data-toggle="modal"
       data-target="#exampleModal"
-    >Launch demo modal</button>
+    >Launch demo modal</button>-->
 
     <!-- Modal -->
     <div
@@ -55,9 +55,6 @@
     <div>
       <!-- Target DOM node #1 -->
       <div class="UppyDragDrop-One"></div>
-
-      <!-- Progress bar #1 -->
-      <div class="UppyDragDrop-One-Progress"></div>
     </div>
 
     <div>
@@ -121,8 +118,9 @@ export default Vue.extend({
       .use(DragDrop, { target: '.UppyDragDrop-One' })
       .use(Tus, { endpoint: `${location.origin}/uploads` })
       .use(ProgressBar, {
-        target: '.UppyDragDrop-One-Progress',
+        target: '#app',
         hideAfterFinish: true,
+        fixed: true,
       })
 
     /*
