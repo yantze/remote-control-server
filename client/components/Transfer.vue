@@ -53,18 +53,26 @@
     </div>
 
     <div>
-      <h5>autoProceed is on</h5>
-
       <!-- Target DOM node #1 -->
       <div class="UppyDragDrop-One"></div>
 
       <!-- Progress bar #1 -->
       <div class="UppyDragDrop-One-Progress"></div>
     </div>
+
+    <div>
+      <h5>File list</h5>
+      <ul>
+        <li v-for="(file, key) in files" :key="key">
+          <a :href="'http://localhost:3399/files/'+file.id">{{ file.name }}</a>
+          Size: {{ file.size }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue'
 
 import { Uppy } from '@uppy/core'
@@ -81,7 +89,13 @@ export default Vue.extend({
     return {
       tips: '',
       clipboard: '',
+      files: [],
     }
+  },
+  sockets: {
+    ['UPLOAD_FILE_COMPLETED']({ id, name, size }) {
+      this.files.push({ id, name, size })
+    },
   },
   methods: {
     sendClipboard() {
@@ -111,6 +125,7 @@ export default Vue.extend({
         hideAfterFinish: true,
       })
 
+    /*
     uppyOne.on('complete', result => {
       if (result.successful.length > 0) {
         const items = result.successful.map(item => {
@@ -124,6 +139,7 @@ export default Vue.extend({
         console.log('failed files:', result.failed)
       }
     })
+    */
   },
 })
 </script>
