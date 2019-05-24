@@ -19,27 +19,28 @@ tusServer.datastore = new tus.FileStore({
     // relativeLocation: true,
     path: '/files',
 })
+tusServer.on(TUS_EVENTS.EVENT_UPLOAD_COMPLETE, event => {
+    const meta = event.file.upload_metadata
+    let name = null
+    try {
+        const base64Name = meta.split(',')[0].split(' ')[1]
+        name = Buffer.from(base64Name, 'base64').toString()
+    } catch (e) {
+        console.log('parse file name error:', e, meta)
+    }
+    io.sockets.emit(c.UPLOAD_FILE_COMPLETED, {
+        id: event.file.id,
+        size: event.file.upload_length,
+        name,
+    })
+})
+
 app.use('/uploads', tusServer.handle.bind(tusServer))
 
 app.use(express.static(path.resolve(__dirname, '../dist')))
 
 io.on('connection', socket => {
     handleSocket(socket, robot)
-    tusServer.on(TUS_EVENTS.EVENT_UPLOAD_COMPLETE, event => {
-        const meta = event.file.upload_metadata
-        let name = null
-        try {
-            const base64Name = meta.split(',')[0].split(' ')[1]
-            name = Buffer.from(base64Name, 'base64').toString()
-        } catch (e) {
-            console.log('parse file name error:', e, meta)
-        }
-        socket.emit(c.UPLOAD_FILE_COMPLETED, {
-            id: event.file.id,
-            size: event.file.upload_length,
-            name,
-        })
-    })
 })
 
 /**

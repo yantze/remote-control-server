@@ -77,7 +77,6 @@ import DragDrop from '@uppy/drag-drop'
 import ProgressBar from '@uppy/progress-bar'
 import Tus from '@uppy/tus'
 
-import '@uppy/core/dist/style.css'
 import '@uppy/drag-drop/dist/style.css'
 import '@uppy/progress-bar/dist/style.css'
 
