@@ -107,12 +107,21 @@ export default {
   },
   methods: {
     onLongPressStart(ev) {
-      if (ev.target.classList.contains('bigKey')) {
-        ev.target.classList.remove('bigKey')
+      let el = ev.target
+      if (el.tagName !== 'BUTTON') {
+        if (el.parentElement.tagName === 'BUTTON') {
+          el = ev.target.parentElement
+        } else {
+          return
+        }
+      }
+
+      if (el.classList.contains('bigKey')) {
+        el.classList.remove('bigKey')
         this.bigEl = null
       } else {
-        this.bigEl = ev.target
-        ev.target.classList.add('bigKey')
+        this.bigEl = el
+        el.classList.add('bigKey')
       }
     },
     keyboardInput(event) {
@@ -185,8 +194,9 @@ export default {
 .bigKey {
   position: fixed;
   width: 93% !important;
-  height: 84% !important;
+  height: inherit !important;
   top: 107px;
+  bottom: 20px;
   z-index: 1;
 }
 </style>
