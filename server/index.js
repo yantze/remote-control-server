@@ -39,9 +39,7 @@ app.use('/uploads', tusServer.handle.bind(tusServer))
 
 app.use(express.static(path.resolve(__dirname, '../dist')))
 
-io.on('connection', socket => {
-    handleSocket(socket, robot)
-})
+io.on('connection', socket => handleSocket(socket, robot))
 
 /**
  *
