@@ -5,16 +5,41 @@
       class="d-flex justify-content-center align-items-center"
       style="height: 111px;"
     >
-      <button class="btn btn-light nav-btn" @click="updateSelectInputType('help')">?</button>
-      <button class="btn btn-light nav-btn" @click="updateSelectInputType('trackPad')">
-        <img class src="/img/trackpad.svg" alt="Switch to trackpad">
-      </button>
-      <button class="btn btn-light nav-btn" @click="updateSelectInputType('simpleKeyboard')">
-        <img class src="/img/control.svg" alt="Switch to control">
-      </button>
-      <button class="btn btn-light nav-btn" @click="updateSelectInputType('transfer')">
-        <img class src="/img/transfer.svg" alt="Switch to transfer">
-      </button>
+      <div class="dropdown pl-4">
+        <button
+          tabindex="-1"
+          class="btn"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img class src="/img/more.svg" alt="Switch to control">
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button
+            class="btn btn-light dropdown-item"
+            @click="updateSelectInputType('transfer')"
+            href="#"
+          >Transfer</button>
+          <button
+            class="btn btn-light dropdown-item"
+            @click="updateSelectInputType('help')"
+            href="#"
+          >Help</button>
+        </div>
+      </div>
+      <div class="w-100 d-flex justify-content-center">
+        <button class="btn btn-light nav-btn" @click="updateSelectInputType('trackPad')">
+          <img style="width: 30px;" class src="/img/trackpad.svg" alt="Switch to trackpad">
+          <small class="d-block">Track pad</small>
+        </button>
+        <button class="btn btn-light nav-btn" @click="updateSelectInputType('simpleKeyboard')">
+          <img style="height: 27px;" class src="/img/control.svg" alt="Switch to control">
+          <small class="d-block">Functions</small>
+        </button>
+      </div>
     </div>
     <div class="flex-height-expand">
       <TrackPad v-show="selectedInputType == 'trackPad'"></TrackPad>
@@ -68,6 +93,6 @@ export default {
 <style scoped>
 .nav-btn {
   width: 122px;
-  height: 68px;
+  height: 58px;
 }
 </style>
