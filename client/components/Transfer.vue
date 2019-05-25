@@ -52,17 +52,18 @@
       </div>
     </div>
 
-    <div>
-      <!-- Target DOM node #1 -->
-      <div class="UppyDragDrop-One"></div>
-    </div>
-
-    <div>
+    <div class="pt-3">
+      <span>
+        Drop files here or
+        <label class="btn-link">
+          <input type="file" name="files[]" multiple="true" @change="handleInputChange"> Browse
+        </label>
+      </span>
       <h5>File list</h5>
       <ul>
         <li v-for="(file, key) in files" :key="key">
-          <a :href="'http://localhost:3399/files/'+file.id">{{ file.name }}</a>
-          Size: {{ file.size }}
+          <a :href="locationOrigin + '/files/'+file.id">{{ file.name }}</a>
+          Size: {{ file.size }} Bytes
         </li>
       </ul>
     </div>
@@ -73,11 +74,10 @@
 import Vue from 'vue'
 
 import { Uppy } from '@uppy/core'
-import DragDrop from '@uppy/drag-drop'
 import ProgressBar from '@uppy/progress-bar'
 import Tus from '@uppy/tus'
+import dragDrop from 'drag-drop'
 
-import '@uppy/drag-drop/dist/style.css'
 import '@uppy/progress-bar/dist/style.css'
 
 export default Vue.extend({
@@ -86,6 +86,7 @@ export default Vue.extend({
       tips: '',
       clipboard: '',
       files: [],
+      locationOrigin: location.origin,
     }
   },
   sockets: {
@@ -110,17 +111,49 @@ export default Vue.extend({
         this.clipboard = data
       })
     },
+
+    handleInputChange(ev) {
+      this.uploadFiles(Array.from(ev.target.files))
+    },
+
+    uploadFiles(files) {
+      console.log('Files start upload.')
+
+      files.forEach(file => {
+        try {
+          this.uppyOne.addFile({
+            source: this.id,
+            name: file.name,
+            type: file.type,
+            data: file,
+          })
+        } catch (err) {
+          console.error('Error:', err)
+          // Nothing, restriction errors handled in Core
+        }
+      })
+    },
+  },
+  created() {
+    this.uppyOne = new Uppy({ autoProceed: true })
   },
   mounted() {
-    const uppyOne = new Uppy({ autoProceed: true })
-    uppyOne
-      .use(DragDrop, { target: '.UppyDragDrop-One' })
+    this.uppyOne
       .use(Tus, { endpoint: `${location.origin}/uploads` })
       .use(ProgressBar, {
         target: '#app',
         hideAfterFinish: true,
         fixed: true,
       })
+
+    dragDrop('#app', (files, pos, fileList, directories) => {
+      this.uploadFiles(files)
+
+      console.log('Here are the dropped files', files) // Array of File objects
+      console.log('Dropped at coordinates', pos.x, pos.y)
+      console.log('Here is the raw FileList object if you need it:', fileList)
+      console.log('Here is the list of directories:', directories)
+    })
 
     /*
     uppyOne.on('complete', result => {
@@ -140,3 +173,20 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style>
+#app.drag {
+  border: 2px dashed;
+  border-color: #79710f;
+  background-color: #b7b7b71c;
+}
+
+input[type='file'] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+</style>
