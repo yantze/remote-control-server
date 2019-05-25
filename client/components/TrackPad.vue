@@ -1,5 +1,5 @@
 <template>
-  <div ref="trackPad" class="h-100" @touchmove.prevent="touchMove"></div>
+  <div ref="trackPad" class="h-100" @touchmove.prevent="touchMove" v-long-press="onLongPressStart"></div>
 </template>
 
 <script lang="ts">
@@ -112,6 +112,10 @@ export default {
           scroll: true,
         })
       })
+    },
+    onLongPressStart(ev) {
+      // 这里在触控板上移动，也会触发长按事件
+      console.log('Long Press triger but no handler!')
     },
   },
 }
