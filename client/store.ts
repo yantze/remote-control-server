@@ -30,7 +30,7 @@ const store = new Vuex.Store({
     socketMessage: null,
 
     // Home page tab index
-    selectedInputType: null,
+    selectedInputType: 'simpleKeyboard',
   },
 
   getters: {
