@@ -11,12 +11,14 @@ export default ({ delay = 400, interval = 50 }) => ({
 
         let pressTimer = null
         let pressInterval = null
+        let startTimeStamp = Date.now()
 
         const start = ev => {
             if (ev.type === 'click' && ev.button !== 0) {
                 return
             }
 
+            startTimeStamp = Date.now()
             if (pressTimer === null) {
                 pressTimer = setTimeout(() => {
                     if (interval && interval > 0) {
@@ -42,13 +44,13 @@ export default ({ delay = 400, interval = 50 }) => ({
                 handler(ev, { status: 'intervalEnd' })
             }
         }
+
         // Run Function
-        const handler = (ev, payload) => {
+        function handler(ev, payload) {
             binding.value(ev, payload)
         }
 
-        const startTimeStamp = Date.now()
-    ;['mousedown', 'touchstart'].forEach(ev => el.addEventListener(ev, start))
+        ['mousedown', 'touchstart'].forEach(ev => el.addEventListener(ev, start))
         ;['click', 'mouseout', 'touchend', 'touchcancel'].forEach(ev => el.addEventListener(ev, cancel))
         ;['touchmove'].forEach(ev =>
             el.addEventListener(ev, e => {
