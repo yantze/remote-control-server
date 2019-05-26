@@ -1,5 +1,8 @@
 <template>
   <div class="d-flex flex-column h-100" @touchmove.prevent="empty">
+    <!-- connect tips -->
+    <div class="alert alert-warning" role="alert" v-if="!isConnected">Disconnected</div>
+
     <div
       id="input-type"
       class="d-flex justify-content-center align-items-center"
@@ -79,7 +82,7 @@ export default {
     SimpleKeyboard,
   },
   computed: {
-    ...mapState(['selectedInputType']),
+    ...mapState(['selectedInputType', 'isConnected']),
   },
   methods: {
     empty() {},

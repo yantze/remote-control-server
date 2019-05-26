@@ -26,7 +26,7 @@ const memento = store => {
 const store = new Vuex.Store({
   state: {
     // Socket info
-    isConnected: false,
+    isConnected: true,
     socketMessage: null,
 
     // Home page tab index
