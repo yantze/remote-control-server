@@ -1,5 +1,5 @@
 <template>
-  <div ref="trackPad" class="h-100" @touchmove.prevent="touchMove" v-long-press="onLongPressStart"></div>
+  <div ref="trackPad" class="h-100" @touchmove.prevent="touchMove" v-long-press="onLongPress"></div>
 </template>
 
 <script lang="ts">
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       lastPosition: [],
+      longPressEnable: false,
     }
   },
   created() {
@@ -29,7 +30,7 @@ export default {
     move(touch) {
       const distanceX = touch.clientX - mousePos.clientX
       const distanceY = touch.clientY - mousePos.clientY
-      this.$socket.emit('WS_MOUSE_MOVE', {
+      this.$socket.emit(this.longPressEnable ? 'WS_MOUSE_DRAG' : 'WS_MOUSE_MOVE', {
         x: distanceX * 1.5,
         y: distanceY * 1.5,
       })
@@ -113,9 +114,21 @@ export default {
         })
       })
     },
-    onLongPressStart(ev) {
+    onLongPress(ev, { status }) {
       // 这里在触控板上移动，也会触发长按事件
-      console.log('Long Press triger but no handler!')
+      let change = false
+      if (status === 'start' && this.longPressEnable !== true) {
+        this.longPressEnable = true
+        change = true
+      }
+      if (status === 'end' && this.longPressEnable !== false) {
+        this.longPressEnable = false
+        change = true
+      }
+      if (change) {
+        console.log('Mouse Toggle:', this.longPressEnable)
+        this.$socket.emit('WS_MOUSE_TOGGLE', { button: 'left', pressed: this.longPressEnable })
+      }
     },
   },
 }

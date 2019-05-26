@@ -9,7 +9,7 @@ import LongPress from './plugins/LongPress.js'
 
 Vue.config.productionTip = false
 
-Vue.directive('long-press', LongPress({ delay: 400, interval: 0 }))
+Vue.directive('long-press', LongPress({ delay: 800, interval: 0 }))
 
 Vue.use(
   new VueSocketIO({

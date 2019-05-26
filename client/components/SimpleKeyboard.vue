@@ -4,7 +4,7 @@
       <div class="row my-3">
         <div class="col">
           <button
-            v-long-press="onLongPressStart"
+            v-long-press="onLongPress"
             class="btn btn-light btn-block mx-auto"
             @click="clickKey('up')"
           >
@@ -14,13 +14,13 @@
       </div>
       <div class="row my-4">
         <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
-          <button v-long-press="onLongPressStart" class="btn btn-light" @click="clickKey('left')">
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('left')">
             <img class="direction-img rotate180" src="/img/direction.svg" alt="Left">
           </button>
-          <button v-long-press="onLongPressStart" class="btn btn-light" @click="clickKey('down')">
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('down')">
             <img class="direction-img rotate90" src="/img/direction.svg" alt="Down">
           </button>
-          <button v-long-press="onLongPressStart" class="btn btn-light" @click="clickKey('right')">
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('right')">
             <img class="direction-img" src="/img/direction.svg" alt="Right">
           </button>
         </div>
@@ -28,21 +28,9 @@
 
       <div class="row my-4">
         <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
-          <button
-            v-long-press="onLongPressStart"
-            class="btn btn-light"
-            @click="clickKey('volMute')"
-          >Mute</button>
-          <button
-            v-long-press="onLongPressStart"
-            class="btn btn-light"
-            @click="clickKey('volDown')"
-          >Vol-</button>
-          <button
-            v-long-press="onLongPressStart"
-            class="btn btn-light"
-            @click="clickKey('volUp')"
-          >Vol+</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('volMute')">Mute</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('volDown')">Vol-</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('volUp')">Vol+</button>
         </div>
       </div>
 
@@ -54,23 +42,15 @@
 
       <div class="row my-4">
         <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
-          <button v-long-press="onLongPressStart" class="btn btn-light" @click="clickKey('tab')">Tab</button>
-          <button v-long-press="onLongPressStart" class="btn btn-light" @click="clickKey('esc')">Esc</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('tab')">Tab</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('esc')">Esc</button>
         </div>
       </div>
 
       <div class="row">
         <div class="offset-lg-2 col-lg-8 d-flex justify-content-around">
-          <button
-            v-long-press="onLongPressStart"
-            class="btn btn-light"
-            @click="clickKey('enter')"
-          >Enter</button>
-          <button
-            v-long-press="onLongPressStart"
-            class="btn btn-light"
-            @click="clickKey('space')"
-          >Space</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('enter')">Enter</button>
+          <button v-long-press="onLongPress" class="btn btn-light" @click="clickKey('space')">Space</button>
         </div>
       </div>
 
@@ -106,7 +86,11 @@ export default {
     }
   },
   methods: {
-    onLongPressStart(ev) {
+    onLongPress(ev, { status }) {
+      if (status !== 'start') {
+        return
+      }
+
       let el = ev.target
       if (el.tagName !== 'BUTTON') {
         if (el.parentElement.tagName === 'BUTTON') {

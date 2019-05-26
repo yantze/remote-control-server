@@ -40,6 +40,11 @@ module.exports = function(socket, robot) {
         robot.scrollMouse(x, y)
     }
 
+    function dragMouse({ x, y }) {
+        const pos = robot.getMousePos()
+        robot.dragMouse(pos.x + x, pos.y + y)
+    }
+
     socket.on(c.WS_MOUSE_MOVE, ({ x, y, scroll }) => {
         if (!scroll) {
             moveMouse({ x, y })
@@ -85,14 +90,19 @@ module.exports = function(socket, robot) {
     })
 
     socket.on(c.WS_KEY_TOGGLE, ({ key, pressed }) => {
-        const state = pressedToState[!!pressed]
-        if (key === 'meta') key = 'command'
-        robot.keyToggle(key, state)
+    // TODO
+    // const state = pressedToState[!!pressed]
+    // if (key === 'meta') key = 'command'
+    // robot.keyToggle(key, state)
     })
 
     socket.on(c.WS_MOUSE_TOGGLE, ({ button, pressed }) => {
         const state = pressedToState[!!pressed]
         robot.mouseToggle(state, button)
+    })
+
+    socket.on(c.WS_MOUSE_DRAG, ({ x, y }) => {
+        dragMouse({ x, y })
     })
 
     socket.on(c.WS_CLIPBOARD_PULL, cb => {

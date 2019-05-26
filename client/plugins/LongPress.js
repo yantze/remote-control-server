@@ -12,8 +12,8 @@ export default ({ delay = 400, interval = 50 }) => ({
         let pressTimer = null
         let pressInterval = null
 
-        const start = e => {
-            if (e.type === 'click' && e.button !== 0) {
+        const start = ev => {
+            if (ev.type === 'click' && ev.button !== 0) {
                 return
             }
 
@@ -21,31 +21,41 @@ export default ({ delay = 400, interval = 50 }) => ({
                 pressTimer = setTimeout(() => {
                     if (interval && interval > 0) {
                         pressInterval = setInterval(() => {
-                            handler(e)
+                            handler(ev, { status: 'interval' })
                         }, interval)
                     }
-                    handler(e)
+                    handler(ev, { status: 'start' })
                 }, delay)
             }
         }
 
         // Cancel Timeout
-        const cancel = () => {
+        const cancel = ev => {
             if (pressTimer !== null) {
                 clearTimeout(pressTimer)
                 pressTimer = null
+                handler(ev, { status: 'end' })
             }
             if (pressInterval) {
                 clearInterval(pressInterval)
                 pressInterval = null
+                handler(ev, { status: 'intervalEnd' })
             }
         }
         // Run Function
-        const handler = e => {
-            binding.value(e)
+        const handler = (ev, payload) => {
+            binding.value(ev, payload)
         }
 
-    ;['mousedown', 'touchstart'].forEach(e => el.addEventListener(e, start))
-        ;['click', 'mouseout', 'touchend', 'touchcancel'].forEach(e => el.addEventListener(e, cancel))
+        const startTimeStamp = Date.now()
+    ;['mousedown', 'touchstart'].forEach(ev => el.addEventListener(ev, start))
+        ;['click', 'mouseout', 'touchend', 'touchcancel'].forEach(ev => el.addEventListener(ev, cancel))
+        ;['touchmove'].forEach(ev =>
+            el.addEventListener(ev, e => {
+                if (Date.now() - startTimeStamp < delay) {
+                    cancel(e)
+                }
+            }),
+        )
     },
 })
