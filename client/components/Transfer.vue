@@ -14,7 +14,7 @@
       <div class="col d-flex">
         <button class="btn btn-light" @click="sendClipboard">Send</button>
         <button class="btn btn-light" @click="reciveClipboard">Recive</button>
-        <button class="btn btn-light" @click="clipboard = ''">Clear</button>
+        <button class="btn btn-light" @click="clipboard = ''; tips = ''">Clear</button>
       </div>
     </div>
 
