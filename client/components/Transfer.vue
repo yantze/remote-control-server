@@ -14,6 +14,7 @@
       <div class="col d-flex">
         <button class="btn btn-light" @click="sendClipboard">Send</button>
         <button class="btn btn-light" @click="reciveClipboard">Recive</button>
+        <button class="btn btn-light" @click="copyToClipboard">Copy to Clipboard</button>
         <button class="btn btn-light" @click="clipboard = ''; tips = ''">Clear</button>
       </div>
     </div>
@@ -56,7 +57,7 @@
       <span>
         Drop files here or
         <label class="btn-link">
-          <input type="file" name="files[]" multiple="true" @change="handleInputChange"> Browse
+          <input type="file" name="files[]" multiple="true" @change="handleInputChange" /> Browse
         </label>
       </span>
       <h5>File list</h5>
@@ -77,6 +78,7 @@ import { Uppy } from '@uppy/core'
 import ProgressBar from '@uppy/progress-bar'
 import Tus from '@uppy/tus'
 import dragDrop from 'drag-drop'
+import copy from 'copy-to-clipboard'
 
 import '@uppy/progress-bar/dist/style.css'
 
@@ -108,8 +110,12 @@ export default Vue.extend({
     },
     reciveClipboard() {
       this.$socket.emit('WS_CLIPBOARD_PULL', data => {
-        this.clipboard = data
+        this.clipboard = data ? data.toString().trim() : ''
       })
+    },
+
+    copyToClipboard() {
+      copy(this.clipboard);
     },
 
     handleInputChange(ev) {
