@@ -1,6 +1,6 @@
 {
   "name": "@vastiny/remote-control-server",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Remote control your computer keyboard and trackpad.",
   "main": "server/index.js",
   "scripts": {
