@@ -30,7 +30,7 @@
     "express": "^4.16.3",
     "lodash": "^4.17.11",
     "register-service-worker": "^1.0.0",
-    "robotjs": "^0.5.1",
+    "robotjs": "^0.6.0",
     "seamless-immutable": "^7.1.4",
     "socket.io": "^2.1.1",
     "tus-node-server": "^0.3.2",
