@@ -1,6 +1,6 @@
 {
-  "name": "remote-control-server",
-  "version": "2.0.0",
+  "name": "@vastiny/remote-control-server",
+  "version": "2.0.1",
   "description": "Remote control your computer keyboard and trackpad.",
   "main": "server/index.js",
   "scripts": {
@@ -23,7 +23,6 @@
     "@uppy/core": "^1.0.0",
     "@uppy/progress-bar": "^1.0.0",
     "@uppy/tus": "^1.0.0",
-    "bootstrap-custom": "file:client/vendor/bootstrap-custom",
     "clipboardy": "^2.0.0",
     "copy-to-clipboard": "^3.2.0",
     "drag-drop": "^4.2.0",
